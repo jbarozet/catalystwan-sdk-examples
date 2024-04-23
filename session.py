@@ -1,3 +1,11 @@
+# =========================================================
+# Catalyst SD-WAN Session
+#
+# Author: jbarozet@gmail.com
+# Last updated: 2024-03-21
+#
+# =========================================================
+
 import os
 
 import urllib3

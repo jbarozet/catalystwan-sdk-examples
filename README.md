@@ -6,6 +6,8 @@ The library is not dependent on environment which is being run in, you just need
 
 This repository just gives a few examples of how to use catalystwan SDK.
 
+## Installation
+
 Create virtual environment:
 
 ```example
@@ -37,3 +39,15 @@ Install required Python packages:
 ```example
 (venv) % pip install -r requirements.txt
 ```
+
+## Usage
+
+Make sure you have the below environment variables defined:
+- vmanage_host
+- vmanage_user
+- vmanage_password
+
+## Note
+
+Curently based on the dev version of catalystwan SDK.
+You may want to change and use the latest version.
