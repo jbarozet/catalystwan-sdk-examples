@@ -31,15 +31,28 @@ from os.path import join
 
 import urllib3
 from catalystwan.session import ManagerHTTPError
+from pydantic import BaseModel
 
 from session import create_session
 
 logger = logging.getLogger("catalystwan")
+
+# feature-profiles: id, type
 profile_id_table = []
+
+# config-group: id, name, number of devices
 config_group_table = []
 
 
+class ConfigGroup(BaseModel):
+    name: str
+    id: int
+
+
 def create_backup_dir():
+    """
+    Create backup folder structure
+    """
     current_datetime = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     workdir = "data/" + current_datetime
     # os.mkdir(workdir)
