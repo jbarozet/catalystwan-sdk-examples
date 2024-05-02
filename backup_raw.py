@@ -30,7 +30,6 @@ from datetime import datetime
 from os.path import join
 
 import urllib3
-from catalystwan.api.config_group_api import ConfigGroupAPI, ConfigGroupResponsePayload
 from catalystwan.session import ManagerHTTPError
 
 from session import create_session
@@ -47,9 +46,7 @@ def create_backup_dir():
     # Check if workdir folder already exists. If yes, then stop backup process
     workdir = join(os.path.abspath(os.getcwd()), workdir)
     if os.path.isdir(workdir):
-        exit(
-            f"{workdir} folder is already in use. Please select a different workdir directory."
-        )
+        exit(f"{workdir} folder is already in use. Please select a different workdir directory.")
 
     # create config-group folders
     cg_dir = ["groups", "associated", "values"]
@@ -209,9 +206,7 @@ def save_config_group_values(rootdir):
         config_group_devices = config_group_table[i][2]
         url = url_base + config_group_id + url_end
 
-        print(
-            f"> Config Group ❯ {config_group_name} with {config_group_devices} associated"
-        )
+        print(f"> Config Group ❯ {config_group_name} with {config_group_devices} associated")
 
         if config_group_devices != 0:
             data = session.get(url).json()
