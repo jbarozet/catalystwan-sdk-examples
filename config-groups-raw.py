@@ -1,34 +1,21 @@
 # =========================================================================
 # Catalyst WAN SDK
 #
-# SD-WAN/SD-Routing UX 2.0 Device Config
-# Using Config Group and Feature Profiles
+# SD-WAN/SD-Routing UX 2.0 Configuration
+# Config Groups, Feature Profiles, Policy Groups
 #
 # Description:
-#   Get config-groups and feature profiles
-#   Get devices associated with config-group
-#   Get deployment values
 #
-# Output data hierarchy:
-#   config_groups
-#       associated
-#       groups
-#       values
-#
-#   feature_profiles
-#       cli
-#       system
-#       transport
-#       service
-#       policy-object
 #
 # =========================================================================
 
 import os
+from datetime import datetime
 
 import click
 
 from manager import MyManager
+from utils import Workdir
 
 
 def help():
@@ -51,39 +38,58 @@ def cli():
 
 
 @click.command()
-def save_groups():
+def backup():
+    """
+    Save config-groups and feature profiles
+    Save devices associated with config-group
+    Save deployment values
+    Backup data hierarchy:
+        config_groups
+            associated
+            groups
+            values
+        feature_profiles
+            cli
+            system
+            transport
+            service
+            policy-object
+    """
+
     manager.save_groups()
     manager.save_associated_devices()
     manager.save_config_group_values()
-
-
-@click.command()
-def save_profiles():
-    manager.save_profiles
+    manager.save_sdwan_profiles()
+    manager.save_sdrouting_profiles()
 
 
 @click.command()
 def profiles_summary():
+    dir = "data/outputs/"
+
+    manager = MyManager(url, user, password, dir)
+    if not manager.status:
+        exit(1)
+
     manager.list_sdwan_profiles_summary()
     manager.list_sdrouting_profiles_summary()
 
 
 @click.command()
 def profiles_categories():
+    dir = "data/outputs/"
+
+    manager = MyManager(url, user, password, dir)
+    if not manager.status:
+        exit(1)
+
     manager.list_profiles_categories()
 
 
-@click.command()
-def save_associated_devices():
-    manager.save_associated_devices()
-
-
 # Add commands to CLI
-cli.add_command(save_groups)
-cli.add_command(save_profiles)
 cli.add_command(profiles_summary)
 cli.add_command(profiles_categories)
-cli.add_command(save_associated_devices)
+cli.add_command(backup)
 
 # Main
 if __name__ == "__main__":
@@ -91,16 +97,20 @@ if __name__ == "__main__":
     url = os.environ.get("vmanage_host")
     user = os.environ.get("vmanage_user")
     password = os.environ.get("vmanage_password")
+    dir = "data/outputs/"
 
     if url is None or user is None or password is None:
         help()
         exit()
 
-    manager = MyManager(url, user, password)
+    # Create backup folder
+    current_datetime = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    dir = "data/" + current_datetime
+    workdir = Workdir(dir)
 
+    # Create SD-WAN Manager session
+    manager = MyManager(url, user, password, workdir)
     if not manager.status:
         exit(1)
-
-    manager.create_workdir()
 
     cli()
