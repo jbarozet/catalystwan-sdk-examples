@@ -35,7 +35,7 @@ from catalystwan.session import create_manager_session
 
 class MyManager:
 
-    def __init__(self, url, user, password, workdir):
+    def __init__(self, url, user, password):
         """
         url: url or ip address
         user: user name
@@ -49,14 +49,12 @@ class MyManager:
         self.port = 443
         self.profile_id_table = []
         self.config_group_table = []
-        self.workdir = workdir
 
         # Disable warnings because of no certificate on vManage
         # urllib3.disable_warnings()
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         self.session = create_manager_session(url=self.url, username=self.user, password=self.password)
-
         self.version = self.session.about().version
         self.api_version = self.session.api_version
         self.application_version = self.session.about().application_version
@@ -69,273 +67,347 @@ class MyManager:
 
         self.status = True
 
-    def save_groups(self):
-        """
-        List all config-groups with their profiles
-        Save payloads in files
-        """
 
-        # API endpoint
+class SDRoutingFeatureProfile:
+    def __init__(self, manager, id, name, type):
+        self.id = id
+        self.name = name
+        self.type = type
+        self.manager = manager
+
+        url_base = "dataservice/v1/feature-profile/sd-routing/"
+
+        match self.type:
+            case "system":
+                urlp = url_base + "system/"
+            case "transport":
+                urlp = url_base + "transport/"
+            case "service":
+                urlp = url_base + "service/"
+            case "cli":
+                urlp = url_base + "cli/"
+            case "policy-object":
+                urlp = url_base + "policy-object/"
+            case _:
+                exit(f"{self.profile_type} type not supported")
+
+        # Get profile_id payload
+        # NOTE: details option has been added in 20.12
+        url = urlp + self.id + "?details=true"
+        self.payload = self.manager.session.get(url).json()
+        self.profile_name = self.payload["profileName"]
+        self.profile_type = self.payload["profileType"]
+        self.solution = self.payload["solution"]
+
+
+class SDRoutingProfileTable:
+    def __init__(self, manager: MyManager):
+
+        self.manager = manager
+        self.profiles_table = []
+
+        url_base = "dataservice/v1/feature-profile/sd-routing/"
+
+        # Get list of profiles
+        data = self.manager.session.get(url_base).json()
+
+        # Get profile details using profile_id
+        for item in data:
+            profile_name = item["profileName"]
+            profile_id = item["profileId"]
+            profile_type = item["profileType"]
+            profile = SDWANFeatureProfile(self.manager, profile_id, profile_name, profile_type)
+            self.profiles_table.append(profile)
+
+    def list(self):
+        print(f"\n~~~ SDWAN Feature Profiles\n")
+        for i in range(len(self.profiles_table)):
+            id = self.profiles_table[i].id
+            name = self.profiles_table[i].name
+            type = self.profiles_table[i].type
+            solution = self.profiles_table[i].solution
+            print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
+
+    def list_categories(self):
+        print(f"\n~~~ SDWAN Feature Profiles per category\n")
+
+        categories = [
+            "system",
+            "transport",
+            "service",
+            "cli",
+            "policy-object",
+        ]
+
+        for item in categories:
+            for i in range(len(self.profiles_table)):
+                type = self.profiles_table[i].type
+                if type == item:
+                    id = self.profiles_table[i].id
+                    name = self.profiles_table[i].name
+                    type = self.profiles_table[i].type
+                    solution = self.profiles_table[i].solution
+                    print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
+
+    def save_profiles(self, workdir):
+
+        print(f"\n~~~ Saving SD-Routing Feature Profiles in {workdir.root}\n")
+
+        for i in range(len(self.profiles_table)):
+            profile_id = self.profiles_table[i].id
+            profile_name = self.profiles_table[i].name
+            profile_type = self.profiles_table[i].type
+            profile_solution = self.profiles_table[i].solution
+            profile_payload = self.profiles_table[i].payload
+
+            print(
+                f"> Saving Profiles name ❯ {profile_name} - id: {profile_id} - type: {profile_type} ({profile_solution}) "
+            )
+
+            match profile_type:
+                case "system":
+                    type = "sdrouting_system"
+                case "transport":
+                    type = "sdrouting_transport"
+                case "service":
+                    type = "sdrouting_service"
+                case "cli":
+                    type = "sdrouting_cli"
+                case "policy-object":
+                    type = "sdrouting_policy"
+                case _:
+                    exit(f"{profile_type} type not supported")
+
+            workdir.save(profile_payload, profile_name, type)
+
+
+class SDWANFeatureProfile:
+    def __init__(self, manager, id, name, type):
+        self.id = id
+        self.name = name
+        self.type = type
+        self.manager = manager
+
+        url_base = "dataservice/v1/feature-profile/sdwan/"
+
+        match self.type:
+            case "system":
+                urlp = url_base + "system/"
+            case "transport":
+                urlp = url_base + "transport/"
+            case "service":
+                urlp = url_base + "service/"
+            case "cli":
+                urlp = url_base + "cli/"
+            case "policy-object":
+                urlp = url_base + "policy-object/"
+            case _:
+                exit(f"{self.profile_type} type not supported")
+
+        # Get profile_id payload
+        # NOTE: details option has been added in 20.12
+        url = urlp + self.id + "?details=true"
+        self.payload = self.manager.session.get(url).json()
+        self.profile_name = self.payload["profileName"]
+        self.profile_type = self.payload["profileType"]
+        self.solution = self.payload["solution"]
+
+
+class SDWANProfileTable:
+    def __init__(self, manager: MyManager):
+
+        self.manager = manager
+        self.profiles_table = []
+
+        url_base = "dataservice/v1/feature-profile/sdwan/"
+
+        # Get list of profiles
+        data = self.manager.session.get(url_base).json()
+
+        # Get profile details using profile_id
+        for item in data:
+            profile_name = item["profileName"]
+            profile_id = item["profileId"]
+            profile_type = item["profileType"]
+            profile = SDWANFeatureProfile(self.manager, profile_id, profile_name, profile_type)
+            self.profiles_table.append(profile)
+
+    def list(self):
+        print(f"\n~~~ SDWAN Feature Profiles\n")
+        for i in range(len(self.profiles_table)):
+            id = self.profiles_table[i].id
+            name = self.profiles_table[i].name
+            type = self.profiles_table[i].type
+            solution = self.profiles_table[i].solution
+            print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
+
+    def list_categories(self):
+        print(f"\n~~~ SDWAN Feature Profiles per category\n")
+
+        categories = [
+            "system",
+            "transport",
+            "service",
+            "cli",
+            "policy-object",
+        ]
+
+        for item in categories:
+            for i in range(len(self.profiles_table)):
+                type = self.profiles_table[i].type
+                if type == item:
+                    id = self.profiles_table[i].id
+                    name = self.profiles_table[i].name
+                    type = self.profiles_table[i].type
+                    solution = self.profiles_table[i].solution
+                    print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
+
+    def save_profiles(self, workdir):
+
+        print(f"\n~~~ Saving Feature Profiles in {workdir.root}\n")
+
+        for i in range(len(self.profiles_table)):
+            profile_id = self.profiles_table[i].id
+            profile_name = self.profiles_table[i].name
+            profile_type = self.profiles_table[i].type
+            profile_solution = self.profiles_table[i].solution
+            profile_payload = self.profiles_table[i].payload
+
+            print(
+                f"> Saving Profiles name ❯ {profile_name} - id: {profile_id} - type: {profile_type} ({profile_solution}) "
+            )
+
+            match profile_type:
+                case "system":
+                    type = "sdwan_system"
+                case "transport":
+                    type = "sdwan_transport"
+                case "service":
+                    type = "sdwan_service"
+                case "cli":
+                    type = "sdwan_cli"
+                case "policy-object":
+                    type = "sdwan_policy"
+                case _:
+                    exit(f"{profile_type} type not supported")
+
+            workdir.save(profile_payload, profile_name, type)
+
+
+class ConfigGroup:
+    def __init__(self, manager, id, name):
+        self.id = id
+        self.name = name
+        self.associated_profiles = 0
+        self.manager = manager
+        self.profile_table = []
+        self.device_table = []
+        self.nb_devices = 0
+        self.device_payload = ""
+        self.value_payload = ""
+
         url_base = "dataservice/v1/config-group/"
 
-        # Get payload
-        data = self.session.get(url_base).json()
+        # Get config-group profiles payload
+        url = url_base + self.id
+        self.payload = self.manager.session.get(url).json()
 
-        print(f"\n~~~ Saving Config Groups in {self.workdir.root}\n")
+    def get_profiles(self):
+        for item in self.payload["profiles"]:
+            profile_name = item["name"]
+            profile_id = item["id"]
+            profile_type = item["type"]
+            new_element = [profile_id, profile_name, profile_type]
+            self.profile_table.append(new_element)
+            self.associated_profiles = self.associated_profiles + 1
 
-        for key in data:
-            config_group_id = key["id"]
-            config_group_name = key["name"]
-            new_element = [config_group_name, config_group_id, 0]
-            self.config_group_table.append(new_element)
-
-            print(f"> Config Group ID ❯ {config_group_name}")
-
-            # Get config-group profiles payload
-            url = url_base + config_group_id
-            config_group = self.session.get(url).json()
-
-            # save all associated feature-profiles in a table
-            for item in config_group["profiles"]:
-                profile_name = item["name"]
-                profile_id = item["id"]
-                profile_type = item["type"]
-                new_element = [profile_id, profile_type]
-                self.profile_id_table.append(new_element)
-                print(f"  - profile-name: {profile_name} -type: {profile_type}, id: {profile_id}")
-
-            # Save config-group payload in file
-            self.workdir.save(config_group, config_group_name, "groups")
-
-    def save_associated_devices(self):
+    def get_devices(self):
         """
-        Get Devices associated with a specific config-group.
         'v1/config-group/{configGroupId}/device/associate'
         """
 
         url_base = "dataservice/v1/config-group/"
         url_end = "/device/associate"
+        url = url_base + self.id + url_end
+        data = self.manager.session.get(url).json()
 
-        print(f"\n~~~ Saving associated devices in {self.workdir.root}\n")
+        # Check if there are associated devices
+        for key in data["devices"]:
+            device_id = key["id"]
+            if device_id != "":
+                self.nb_devices += 1
+                self.device_payload = data
+                self.device_table.append(device_id)
 
-        for i in range(len(self.config_group_table)):
-            config_group_name = self.config_group_table[i][0]
-            config_group_id = self.config_group_table[i][1]
-
-            print(f"> Config Group ❯ {config_group_name} - {config_group_id}")
-
-            url = url_base + config_group_id + url_end
-            data = self.session.get(url).json()
-
-            # Check if there are associated devices
-            nb_devices = 0
-            for key in data["devices"]:
-                device_id = key["id"]
-                if device_id != "":
-                    nb_devices = nb_devices + 1
-                    print(f"  - device_id: {device_id}")
-
-            # Save number of devices associated with selected config-group
-            self.config_group_table[i][2] = nb_devices
-
-            # Save file only if there are devices
-            if nb_devices != 0:
-                self.workdir.save(data, config_group_name, "associated")
-                # tmp = config_group_name + ".json"
-                # filename = join(current_dir, tmp)
-                # with open(filename, "w") as file:
-                #     json.dump(data, file, indent=4)
-
-    def save_config_group_values(self):
+    def get_values(self):
         """
         'v1/config-group/{configGroupId}/device/variables'
         """
 
         url_base = "dataservice/v1/config-group/"
         url_end = "/device/variables"
+        url = url_base + self.id + url_end
 
-        print(f"\n~~~ Saving device deployment values in {self.workdir.root}\n")
+        if self.nb_devices != 0:
+            self.value_payload = self.manager.session.get(url).json()
+
+
+class ConfigGroupTable:
+    def __init__(self, manager: MyManager):
+        """
+        'v1/config-group'
+        """
+
+        self.manager = manager
+        self.config_group_table = []
+
+        # API endpoint
+        url_base = "dataservice/v1/config-group/"
+
+        # Get payload
+        data = self.manager.session.get(url_base).json()
+
+        for key in data:
+            config_group_id = key["id"]
+            config_group_name = key["name"]
+            config_group = ConfigGroup(self.manager, config_group_id, config_group_name)
+            config_group.get_profiles()
+            config_group.get_devices()
+            config_group.get_values()
+            self.config_group_table.append(config_group)
+
+    def list_groups(self):
+        print(f"\n~~~ Config Groups\n")
+        for i in range(len(self.config_group_table)):
+            id = self.config_group_table[i].id
+            name = self.config_group_table[i].name
+            profile_table = self.config_group_table[i].profile_table
+            print(f"> Config Group ID ❯ {id} - name: {name}")
+            for j in range(len(profile_table)):
+                profile_id = profile_table[j][0]
+                profile_name = profile_table[j][1]
+                profile_type = profile_table[j][2]
+                print(f"  - profile-id: {profile_id} - name: {profile_name} - type: {profile_type} ")
+
+    def save_groups(self, workdir):
+        """
+        List all config-groups with their profiles
+        Save config-group payloads in files
+        """
+
+        print(f"\n~~~ Saving Config Groups in {workdir.root}\n")
 
         for i in range(len(self.config_group_table)):
-            config_group_name = self.config_group_table[i][0]
-            config_group_id = self.config_group_table[i][1]
-            config_group_devices = self.config_group_table[i][2]
-            url = url_base + config_group_id + url_end
+            group_id = self.config_group_table[i].id
+            group_name = self.config_group_table[i].name
+            group_payload = self.config_group_table[i].payload
+            device_payload = self.config_group_table[i].device_payload
+            value_payload = self.config_group_table[i].value_payload
+            nb_devices = self.config_group_table[i].nb_devices
 
-            print(f"> Config Group ❯ {config_group_name} with {config_group_devices} associated")
-
-            if config_group_devices != 0:
-                data = self.session.get(url).json()
-                self.workdir.save(data, config_group_name, "values")
-                # tmp = config_group_name + ".json"
-                # filename = join(current_dir, tmp)
-                # with open(filename, "w") as file:
-                #     json.dump(data, file, indent=4)
-
-    def save_sdwan_profiles(self):
-        """
-        List Feature Profiles with details and parcels
-        Save payloads in files
-        """
-
-        url_base = "dataservice/v1/feature-profile/sdwan/"
-
-        print(f"\n~~~ Saving SD-WAN Features Profiles in {self.workdir.root}\n")
-
-        # Get list of profiles
-        data = self.session.get(url_base).json()
-
-        # Get profile details using profile_id
-        for item in data:
-            profile_name = item["profileName"]
-            profile_id = item["profileId"]
-            profile_type = item["profileType"]
-
-            match profile_type:
-                case "system":
-                    urlp = url_base + "system/"
-                    type = "sdwan_system"
-                case "transport":
-                    urlp = url_base + "transport/"
-                    type = "sdwan_transport"
-                case "service":
-                    urlp = url_base + "service/"
-                    type = "sdwan_service"
-                case "cli":
-                    urlp = url_base + "cli/"
-                    type = "sdwan_cli"
-                case "policy-object":
-                    urlp = url_base + "policy-object/"
-                    type = "sdwan_policy"
-                case _:
-                    exit(f"{profile_type} type not supported")
-
-            # Get profile_id payload
-            # NOTE: details option has been added in 20.12
-            url = urlp + profile_id + "?details=true"
-            data = self.session.get(url).json()
-
-            profile_name = data["profileName"]
-            print(f"> Profile Name ❯ {profile_name} - {profile_id} - {profile_type}")
-            self.workdir.save(data, profile_name, type)
-
-    def save_sdrouting_profiles(self):
-        """
-        List Feature Profiles with details and parcels
-        Save payloads in files
-        """
-
-        url_base = "dataservice/v1/feature-profile/sd-routing/"
-
-        print(f"\n~~~ Saving SD-Routing Features Profiles in {self.workdir.root}\n")
-
-        # Get list of profiles
-        data = self.session.get(url_base).json()
-
-        # Get profile details using profile_id
-        for item in data:
-            profile_name = item["profileName"]
-            profile_id = item["profileId"]
-            profile_type = item["profileType"]
-
-            match profile_type:
-                case "system":
-                    urlp = url_base + "system/"
-                    type = "sdrouting_system"
-                case "transport":
-                    urlp = url_base + "transport/"
-                    type = "sdrouting_transport"
-                case "service":
-                    urlp = url_base + "service/"
-                    type = "sdrouting_service"
-                case "cli":
-                    urlp = url_base + "cli/"
-                    type = "sdrouting_cli"
-                case "policy-object":
-                    urlp = url_base + "policy/"
-                    type = "sdrouting_policy"
-                case _:
-                    exit(f"{profile_type} type not supported")
-
-            # Get profile_id payload
-            # NOTE: details option has been added in 20.12
-            url = urlp + profile_id + "?details=true"
-            data = self.session.get(url).json()
-
-            profile_name = data["profileName"]
-            print(f"> Profile Name ❯ {profile_name} - {profile_id} - {profile_type}")
-            self.workdir.save(data, profile_name, type)
-
-    def list_sdwan_profiles_summary(self):
-        """Feature Profiles - Get all profiles"""
-
-        base = "dataservice/v1/feature-profile/sdwan/"
-
-        print("\n~~~ List of SD-WAN Features Profiles\n")
-
-        data = self.session.get(base).json()
-
-        # Get profile details using profile_id
-        for item in data:
-            profile_name = item["profileName"]
-            profile_id = item["profileId"]
-            profile_type = item["profileType"]
-            solution = item["solution"]
-
-            print(f"> Profile Name ❯ {profile_name} - {solution} - {profile_id} - {profile_type}")
-
-    def list_sdrouting_profiles_summary(self):
-        """Feature Profiles - Get all profiles"""
-
-        base = "dataservice/v1/feature-profile/sd-routing/"
-
-        print("\n~~~ List of SD-Routing Features Profiles\n")
-
-        data = self.session.get(base).json()
-
-        # Get profile details using profile_id
-        for item in data:
-            profile_name = item["profileName"]
-            profile_id = item["profileId"]
-            profile_type = item["profileType"]
-            solution = item["solution"]
-
-            print(f"> Profile Name ❯ {profile_name} - {solution} - {profile_id} - {profile_type}")
-
-    def list_profiles_categories(self):
-        """
-        List Feature Profiles per category:
-            - system
-            - transport
-            - service
-            - cli
-            - policy-object
-        """
-
-        categories = [
-            "dataservice/v1/feature-profile/sdwan/system",
-            "dataservice/v1/feature-profile/sdwan/transport",
-            "dataservice/v1/feature-profile/sdwan/service",
-            "dataservice/v1/feature-profile/sdwan/cli",
-            "dataservice/v1/feature-profile/sdwan/policy-object",
-        ]
-
-        for item in categories:
-            data = self.session.get(item).json()
-            for item in data:
-                profile_name = item["profileName"]
-                profile_id = item["profileId"]
-                profile_type = item["profileType"]
-                solution = item["solution"]
-
-                print(f"> Profile Name ❯ {profile_name} - {solution} - {profile_id} - {profile_type}")
-
-    def list_automated_rules(self):
-        # base = "dataservice/tag/tagRules/"
-        # base = "v1/config-group/{configGroupId}/rules"
-        base = "dataservice/v1/config-group/"
-        config_group_id = input("Enter config-group id: ")
-        url = base + config_group_id + "/rules"
-        data = self.session.get(url).json()
-        data_formatted = json.dumps(data, indent=4)
-        print(data_formatted)
+            # Save config-group payload in file
+            print(f"> Saving Config Group name ❯ {group_name} - ID: {group_id} - devices: {nb_devices}")
+            workdir.save(group_payload, group_name, "groups")
+            if nb_devices != 0:
+                workdir.save(device_payload, group_name, "associated")
+                workdir.save(value_payload, group_name, "values")
