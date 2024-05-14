@@ -9,12 +9,12 @@
 #
 # =========================================================================
 
+import logging
 import os
 from datetime import datetime
 
-import click
-
 from manager import ConfigGroupTable, MyManager, SDRoutingProfileTable, SDWANProfileTable
+from prompt import Prompt
 from utils import Workdir
 
 
@@ -32,13 +32,6 @@ def help():
     print("export vmanage_password=some_password")
 
 
-@click.group()
-def cli():
-    """Command line tool to showcase Catalyst SD-WAN Python SDK"""
-    pass
-
-
-@click.command()
 def backup():
     """
     Save config-groups and feature profiles
@@ -57,6 +50,10 @@ def backup():
             policy-object
     """
 
+    if not manager.status:
+        print("Session not created")
+        return
+
     # Create backup folder
     current_datetime = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     dir = "data/" + current_datetime
@@ -70,46 +67,92 @@ def backup():
     sdrouting_profiles_table.save_profiles(workdir)
 
 
-@click.command()
 def list_groups():
+    if not manager.status:
+        logging.error("Session not created")
+        return
     config_group_table = ConfigGroupTable(manager)
     config_group_table.list_groups()
 
 
-@click.command()
-def list_profiles():
+def list_sdwan_profiles():
+    if not manager.status:
+        print("Session not created")
+        return
     profiles_table = SDWANProfileTable(manager)
     profiles_table.list()
 
 
-@click.command()
-def list_profile_categories():
+def list_sdwan_profile_categories():
+    if not manager.status:
+        print("Session not created")
+        return
     profile_table = SDWANProfileTable(manager)
     profile_table.list_categories()
 
 
-# Add commands to CLI
-cli.add_command(backup)
-cli.add_command(list_groups)
-cli.add_command(list_profiles)
-cli.add_command(list_profile_categories)
+def list_sdrouting_profiles():
+    if not manager.status:
+        print("Session not created")
+        return
+    profiles_table = SDRoutingProfileTable(manager)
+    profiles_table.list()
 
 
-# Main
-if __name__ == "__main__":
+def list_sdrouting_profile_categories():
+    if not manager.status:
+        print("Session not created")
+        return
+    profile_table = SDRoutingProfileTable(manager)
+    profile_table.list_categories()
 
+
+def quit():
+    print("Quitting ...")
+    raise SystemExit
+
+
+def create_session():
     url = os.environ.get("vmanage_host")
     user = os.environ.get("vmanage_user")
     password = os.environ.get("vmanage_password")
-    dir = "data/outputs/"
 
     if url is None or user is None or password is None:
         help()
         exit()
 
     # Create SD-WAN Manager session
-    manager = MyManager(url, user, password)
+    print(f"Creating session with SD-WAN Manager {url}\n")
+    manager.create_session(url, user, password)
     if not manager.status:
         exit(1)
 
-    cli()
+
+# Main
+if __name__ == "__main__":
+
+    logging.basicConfig(
+        format="%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d [%(filename)s])",
+        datefmt="%d/%m/%Y %I:%M:%S %p",
+        level=logging.DEBUG,
+    )
+
+    manager = MyManager()
+    dir = "data/outputs/"
+
+    options = {
+        "Create session with SD-WAN Manager": create_session,
+        "Backup Configuration Groups and Feature Profiles": backup,
+        "List Configuration Groups": list_groups,
+        "List SD-WAN Feature Profiles": list_sdwan_profiles,
+        "List SD-WAN Feature Profiles per category": list_sdwan_profile_categories,
+        "List SD-Routing Feature Profiles": list_sdrouting_profiles,
+        "List SD-Routing Feature Profiles per category": list_sdrouting_profile_categories,
+        "Quit": quit,
+    }
+
+    while True:
+        print("")
+        Prompt.dict_menu(options)
+
+    # cli()

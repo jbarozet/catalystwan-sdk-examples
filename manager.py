@@ -25,9 +25,6 @@
 #
 # =========================================================================
 
-import json
-import os
-from os.path import join
 
 import urllib3
 from catalystwan.session import create_manager_session
@@ -35,7 +32,16 @@ from catalystwan.session import create_manager_session
 
 class MyManager:
 
-    def __init__(self, url, user, password):
+    def __init__(self):
+        self.status = False
+        self.url = None
+        self.user = None
+        self.password = None
+        self.port = 443
+        self.profile_id_table = []
+        self.config_group_table = []
+
+    def create_session(self, url, user, password):
         """
         url: url or ip address
         user: user name
@@ -63,7 +69,7 @@ class MyManager:
         print(f"vManage: {self.session.url}")
         print(f"Version: {self.session.about().version}")
         print(f"API Version: {self.session.api_version}")
-        print(f"Application Version: {self.session.about().application_version}")
+        print(f"Application Version: {self.session.about().application_version}\n")
 
         self.status = True
 
@@ -120,7 +126,7 @@ class SDRoutingProfileTable:
             self.profiles_table.append(profile)
 
     def list(self):
-        print(f"\n~~~ SDWAN Feature Profiles\n")
+        print(f"\n~~~ SD-Routing Feature Profiles\n")
         for i in range(len(self.profiles_table)):
             id = self.profiles_table[i].id
             name = self.profiles_table[i].name
@@ -129,7 +135,7 @@ class SDRoutingProfileTable:
             print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
 
     def list_categories(self):
-        print(f"\n~~~ SDWAN Feature Profiles per category\n")
+        print(f"\n~~~ SD-Routing Feature Profiles per category\n")
 
         categories = [
             "system",
@@ -233,7 +239,7 @@ class SDWANProfileTable:
             self.profiles_table.append(profile)
 
     def list(self):
-        print(f"\n~~~ SDWAN Feature Profiles\n")
+        print(f"\n~~~ SD-WAN Feature Profiles\n")
         for i in range(len(self.profiles_table)):
             id = self.profiles_table[i].id
             name = self.profiles_table[i].name
@@ -242,7 +248,7 @@ class SDWANProfileTable:
             print(f"> Profile Name ❯ {name} - {id} - {type} ({solution})")
 
     def list_categories(self):
-        print(f"\n~~~ SDWAN Feature Profiles per category\n")
+        print(f"\n~~~ SD-WAN Feature Profiles per category\n")
 
         categories = [
             "system",
