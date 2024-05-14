@@ -6,6 +6,7 @@ logs/
 data
 sastre_backup
 .env.sh
+catalystwan.log
 #--- python -------------------------
 __pycache__/
 *.py[cod]
