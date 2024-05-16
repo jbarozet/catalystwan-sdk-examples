@@ -10,7 +10,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 session = create_session()
 
 
-system_fp_uuid = session.api.sdwan_feature_profiles.system.create_profile("System_FP", "System FP description").id
+system_fp_id = session.api.sdwan_feature_profiles.system.create_profile(
+    "SDK - System", "System feature profile (SDK)"
+).id
 
 # session.api.config_group.create(name=sd-routing,description="a basic config-group", solution="text", profile_ids=list)
-session.api.config_group.create("Test_Config_Group", "Test Config Group description", "sdwan", [system_fp_uuid])
+session.api.config_group.create("SDK - Config-Group", "Test Config Group description (SDK)", "sdwan", [system_fp_id])

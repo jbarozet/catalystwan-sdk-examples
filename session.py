@@ -24,8 +24,6 @@ def create_session() -> ManagerSession:
     user = os.environ.get("vmanage_user")
     password = os.environ.get("vmanage_password")
 
-    # print(f"vManage: {url}, user: {user}, password: {password}")
-
     if url is None or user is None or password is None:
         print("For Windows Workstation, vManage details must be set via environment variables using below commands")
         print("set vmanage_host=10.10.1.1")
@@ -41,10 +39,10 @@ def create_session() -> ManagerSession:
 
     session = create_manager_session(url=url, username=user, password=password)
 
-    print("--- Session Information")
-    print(f"vManage: {session.url}")
-    print(f"Version: {session.about().version}")
-    print(f"API Version: {session.api_version}")
-    print(f"Application Version: {session.about().application_version}")
+    print("~~~  Session Information")
+    print(f" - vManage: {session.url}")
+    print(f" - Version: {session.about().version}")
+    print(f" - API Version: {session.api_version}")
+    print(f" - Application Version: {session.about().application_version}")
 
     return session

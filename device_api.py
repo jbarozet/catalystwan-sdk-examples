@@ -6,32 +6,27 @@ from session import create_session
 session = create_session()
 
 
-# ----------------------------------------------------------------------------------------------------
-# API - Display Device list
-# ----------------------------------------------------------------------------------------------------
-
 # Get the list of devices
 devices = session.api.devices.get()
+count = session.api.devices.count_devices(personality=Personality.EDGE)
+
+print(f"count: {count}")
 
 # Display the list of devices
-print("\n--- List of devices")
+print("\n~~~ All devices")
 for dev in devices:
-    print(f"{dev.hostname} - Load: {dev.cpu_load} - Board serial: {dev.board_serial}")
+    print(f" - {dev.hostname} - Load: {dev.cpu_load} - Board serial: {dev.board_serial} - UUID: {dev.uuid}")
     # print(session.api.device_state.get_system_status(dev.id))
 
-
-# ----------------------------------------------------------------------------------------------------
-# API - Filter device types
-# ----------------------------------------------------------------------------------------------------
-
 # Filter vmanage devices
-vmanage = devices.filter(personality=Personality.VMANAGE).single_or_default()
+vsmarts = devices.filter(personality=Personality.VSMART)
 
-# Display vManage information
-print("\n--- vManage details")
-print(f"Hostname: {vmanage.hostname}")
-print(f"- System-IP: {vmanage.local_system_ip}")
-print(f"- Load: {vmanage.cpu_load}")
-print(f"- Board serial: {vmanage.board_serial}")
+print("\n~~~ SD-WAN Controllers")
+
+for item in vsmarts:
+    print(
+        f" - {item.hostname} - {item.local_system_ip} - Load: {item.cpu_load} - Board serial: {item.board_serial} - UUID: {item.uuid}"
+    )
+
 
 # ---END--

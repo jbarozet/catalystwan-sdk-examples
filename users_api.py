@@ -14,5 +14,7 @@ users = session.api.users.get()
 # Display the list of devices
 # ----------------------------------------------------------------------------------------------------
 
+print("\n~~~ Users")
+
 for user in users:
-    print(f"{user.username} > group: {user.group} - resource-group:{user.resource_group}")
+    print(f" - {user.username} > group: {user.group} - resource-group:{user.resource_group}")
