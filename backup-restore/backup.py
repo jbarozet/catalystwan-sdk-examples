@@ -134,7 +134,7 @@ if __name__ == "__main__":
     logging.basicConfig(
         format="%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d [%(filename)s])",
         datefmt="%d/%m/%Y %I:%M:%S %p",
-        level=logging.DEBUG,
+        level=logging.INFO,
     )
 
     manager = MyManager()
