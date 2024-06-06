@@ -5,7 +5,7 @@ crash.log
 logs/
 data
 sastre_backup
-.env.sh
+init.sh
 catalystwan.log
 #--- python -------------------------
 __pycache__/
@@ -23,3 +23,4 @@ venv.bak/
 .vscode/
 *.code-workspace
 .idea
+payloads
