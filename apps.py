@@ -2,6 +2,7 @@ import click
 import tabulate
 from session import create_session
 
+
 @click.group()
 def cli():
     """Command line tool to showcase Catalyst SD-WAN Python SDK"""
