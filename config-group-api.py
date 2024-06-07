@@ -47,14 +47,16 @@ def get_groups():
         print(f"- Description: {group.description}")
         print(f"- Solution: {group.solution}")
 
-        for profile in group.profiles:
-            print(f"- Profile Id: {profile.id}")
-            print(f"  - Name: {profile.name}")
-            print(f"  - Type: {profile.type}")
-            print(f"  - Solution: {profile.solution}")
-            print(f"  - Created by: {profile.created_by}")
-            print(f"  - Last updated by: {profile.last_updated_by}")
-            print(f"  - Last updated on: {profile.last_updated_on}")
+        profile_list = group.profiles
+        if profile_list is not None:
+            for profile in profile_list:
+                print(f"- Profile Id: {profile.id}")
+                print(f"  - Name: {profile.name}")
+                print(f"  - Type: {profile.type}")
+                print(f"  - Solution: {profile.solution}")
+                print(f"  - Created by: {profile.created_by}")
+                print(f"  - Last updated by: {profile.last_updated_by}")
+                print(f"  - Last updated on: {profile.last_updated_on}")
 
 
 # Get profiles.
