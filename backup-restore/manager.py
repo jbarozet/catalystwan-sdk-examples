@@ -73,6 +73,9 @@ class MyManager:
 
         self.status = True
 
+    def close(self):
+        self.session.close()
+
 
 class SDRoutingFeatureProfile:
     def __init__(self, manager, id, name, type):

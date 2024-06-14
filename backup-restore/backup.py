@@ -4,9 +4,6 @@
 # SD-WAN/SD-Routing UX 2.0 Configuration
 # Config Groups, Feature Profiles, Policy Groups
 #
-# Description:
-#
-#
 # =========================================================================
 
 import logging
@@ -109,6 +106,7 @@ def list_sdrouting_profile_categories():
 
 def quit():
     print("Quitting ...")
+    manager.close()
     raise SystemExit
 
 
@@ -154,5 +152,3 @@ if __name__ == "__main__":
     while True:
         print("")
         Prompt.dict_menu(options)
-
-    # cli()
