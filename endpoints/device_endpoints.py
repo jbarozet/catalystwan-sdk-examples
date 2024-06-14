@@ -1,3 +1,6 @@
+import sys
+
+sys.path.insert(0, "..")
 from session import create_session
 
 # Create session
