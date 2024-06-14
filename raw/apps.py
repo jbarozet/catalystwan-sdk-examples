@@ -1,5 +1,10 @@
+import sys
+
 import click
 import tabulate
+
+sys.path.insert(0, "..")
+
 from session import create_session
 
 
