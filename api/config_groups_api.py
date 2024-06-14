@@ -6,8 +6,11 @@
 #
 # =========================================================================
 
+import sys
+
 import click
 
+sys.path.insert(0, "..")
 from session import create_session
 
 # from catalystwan.models.configuration.feature_profile.sdwan.system.aaa import AAAParcel

@@ -1,3 +1,6 @@
+import sys
+
+sys.path.insert(0, "..")
 from catalystwan.models.configuration.feature_profile.sdwan.system.aaa import AAAParcel
 
 from session import create_session

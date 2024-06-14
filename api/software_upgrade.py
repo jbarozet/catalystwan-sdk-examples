@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, "..")
+
 from catalystwan.utils.personality import Personality
 
 from session import create_session
