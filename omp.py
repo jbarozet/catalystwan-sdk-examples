@@ -19,3 +19,5 @@ omp_peers = session.api.omp.get_omp_peers(deviceid)
 
 for peer in omp_peers:
     print(f"vsmart: {peer.peerIp} - state: {peer.state} - SiteId: {peer.siteId} ")
+
+session.close()

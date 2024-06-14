@@ -28,5 +28,6 @@ for item in vsmarts:
         f" - {item.hostname} - {item.local_system_ip} - Load: {item.cpu_load} - Board serial: {item.board_serial} - UUID: {item.uuid}"
     )
 
+session.close()
 
 # ---END--

@@ -10,3 +10,5 @@ devices = session.api.devices.get()
 for p in Personality:
     pds = devices.filter(personality=p)
     session.api.software.activate(pds, "20.9.1-377")
+
+session.close()

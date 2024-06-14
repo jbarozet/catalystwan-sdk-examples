@@ -57,3 +57,5 @@ for key in data:
     print(f"\n~~~ Saving {profile_id} payload details in {filename}")
     with open(filename, "w") as file:
         json.dump(data, file, indent=4)
+
+session.close()

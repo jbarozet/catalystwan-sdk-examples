@@ -21,3 +21,5 @@ org_name = settings.get_organizations()[0].org
 validator_fqdn = settings.get_devices()[0].domain_ip
 print(f"Organization Name: {org_name}")
 print(settings.get_devices())
+
+session.close()

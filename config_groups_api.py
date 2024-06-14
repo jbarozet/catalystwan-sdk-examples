@@ -7,9 +7,10 @@
 # =========================================================================
 
 import click
-from catalystwan.models.configuration.feature_profile.sdwan.system.aaa import AAAParcel
 
 from session import create_session
+
+# from catalystwan.models.configuration.feature_profile.sdwan.system.aaa import AAAParcel
 
 
 def print_profile_details(api):
@@ -58,10 +59,12 @@ def get_groups():
                 print(f"  - Last updated by: {profile.last_updated_by}")
                 print(f"  - Last updated on: {profile.last_updated_on}")
 
+    session.close()
+
 
 # Get profiles.
 # Filtering available with:
-#   profile = system_api.get_profiles().filter(profile_name="JMB_Border_Basic").single_or_default()
+#   profile = system_api.get_profiles().filter(profile_name="JMB_SDWAN_Basic").single_or_default()
 @click.command()
 def get_profiles():
     print("\n~~~ List of Features Profiles\n")
@@ -75,9 +78,9 @@ def get_profiles():
     service_api = session.api.sdwan_feature_profiles.service
     print_profile_details(service_api)
 
-    # Not implemented yet
-    # cli_api = session.api.sdwan_feature_profiles.cli
-    # print_profile_details(cli_api)
+    # Not implemented yet -catalystwan 0.33.7.dev6
+    cli_api = session.api.sdwan_feature_profiles.cli
+    print_profile_details(cli_api)
 
     # Not implemented yet
     # policy_api = session.api.sdwan_feature_profiles.policy_object
@@ -90,6 +93,8 @@ def get_profiles():
     # Not implemented yet
     # cli_api = session.api.sd_routing_feature_profiles.cli
     # print_profile_details(cli_api)
+
+    session.close()
 
 
 cli.add_command(get_groups)
