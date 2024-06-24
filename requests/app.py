@@ -2,6 +2,7 @@
 
 import cmd
 import json
+import logging
 import os
 import sys
 
@@ -10,9 +11,6 @@ import tabulate
 from vmanage import Authentication
 
 import requests
-
-requests.packages.urllib3.disable_warnings()
-
 
 # ----------------------------------------------------------------------------------------------------
 # Click CLI
@@ -346,10 +344,14 @@ def approute_device():
         print("Exception line number: {}".format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 
-# ----------------------------------------------------------------------------------------------------
-# Get Parameters
-# ----------------------------------------------------------------------------------------------------
+# Disable warning
+requests.packages.urllib3.disable_warnings()
 
+# Logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename="sdwan.log", level=logging.INFO)
+
+# Get Parameters
 vmanage_host = os.environ.get("vmanage_host")
 vmanage_port = os.environ.get("vmanage_port")
 vmanage_username = os.environ.get("vmanage_user")
@@ -375,7 +377,15 @@ if vmanage_host is None or vmanage_port is None or vmanage_username is None or v
 
 vmanage = Authentication(vmanage_host, vmanage_port, vmanage_username, vmanage_password)
 jsessionid = vmanage.login()
-token = vmanage.get_token()
+if jsessionid:
+    logger.info(f"Login successful, JSESSIONID: {jsessionid}")
+    token = vmanage.get_token()
+    if token:
+        logger.info(f"Token retrieved: {token}")
+    else:
+        logger.error("Failed to retrieve token")
+else:
+    logger.error("Login failed")
 
 if token is not None:
     header = {"Content-Type": "application/json", "Cookie": jsessionid, "X-XSRF-TOKEN": token}
