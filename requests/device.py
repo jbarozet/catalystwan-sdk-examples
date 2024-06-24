@@ -48,15 +48,15 @@ def get_devices():
         click.echo("Failed to get device list " + str(response.text))
         exit()
 
-    content = response.json()
+    # --- Print json output to console
+    # payload = response.json()
+    # payload_formatted = json.dumps(payload, indent=4)
+    # print(payload_formatted)
 
-    # Print json output
-    # content_json = json.dumps(content, indent=4)
-    # print(content_json)
-
-    # Write json output to file
+    # --- Write json output to file
+    payload = response.json()
     with open("devices.json", "w") as file:
-        json.dump(content, file, indent=4)
+        json.dump(payload, file, indent=4)
 
     table = list()
 
