@@ -25,13 +25,6 @@ Activate virtual environment:
 (venv) %
 ```
 
-or if you use fish:
-
-```example
-% source .venv/bin/activate.fish
-(venv) %
-```
-
 Upgrade initial virtual environment packages:
 
 ```example
@@ -51,9 +44,18 @@ Make sure you have the below environment variables defined:
 - vmanage_host
 - vmanage_user
 - vmanage_password
+- vmanage_port
 
 Use `export catalystwan_devel=true` if you want to have debug messsages.
 They will be dumped into catalystwan.log file.
+
+Python examples organized as follows:
+
+- `requests` folder: examples based on the requests library
+- `raw` folder: examples based on catalystwan layer1
+- `endpoints` folder: examples based on catalystwan layer2, endpoints
+- `api` folder: examples based on catalystwan layer3, user APIs
+
 
 ## Note
 
