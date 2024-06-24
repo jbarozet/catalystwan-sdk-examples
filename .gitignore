@@ -28,3 +28,4 @@ venv.bak/
 *.code-workspace
 .idea
 payloads
+requests/devices.json
