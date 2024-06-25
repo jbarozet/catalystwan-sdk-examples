@@ -1,3 +1,5 @@
+import json
+import os
 import sys
 
 import click
@@ -22,6 +24,18 @@ def app_list():
     # Using raw APIs
     response = session.get("/dataservice/device/dpi/application-mapping")
     payload = response.json()
+
+    # Create payload folder
+    path = "./payloads"
+    if not os.path.exists(path):
+        os.mkdir(path)
+        print("\n~~~ Folder %s created!" % path)
+    else:
+        print("\n~~~ Folder %s already exists" % path)
+
+    print("\n~~~ Saving payload in file payloads/payload_app_list.json")
+    with open("payloads/payload_app_list.json", "w") as file:
+        json.dump(payload, file, indent=4)
 
     # Format output
     table = list()
