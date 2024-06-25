@@ -10,7 +10,7 @@ sastre_backup
 init.sh
 catalystwan.log
 requests/devices.json
-requests/sdwan.log
+**/sdwan.log
 #--- python -------------------------
 __pycache__/
 *.py[cod]
