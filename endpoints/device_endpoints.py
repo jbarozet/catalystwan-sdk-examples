@@ -6,23 +6,22 @@ from session import create_session
 # Create session
 session = create_session()
 
-device_inventory = session.endpoints.configuration_device_inventory
 
 # ----------------------------------------------------------------------------------------------------
 # All edge devices in inventory
 # ----------------------------------------------------------------------------------------------------
 
-print("\n~~~ Edge device inventory")
+device_inventory = session.endpoints.configuration_device_inventory
+
+# Devices
 devices = device_inventory.get_device_details("vedges")
+print("\n~~~ Edge device inventory")
 for item in devices:
     print(
         f" - uuid: {item.uuid} - device type: {item.device_type} - hostname: {item.host_name} - chassis number: {item.chasis_number}"
     )
 
-# ----------------------------------------------------------------------------------------------------
 # Controllers
-# ----------------------------------------------------------------------------------------------------
-
 controllers = device_inventory.get_device_details("controllers")
 managers = controllers.filter(device_type="vmanage")
 validators = controllers.filter(device_type="vbond")

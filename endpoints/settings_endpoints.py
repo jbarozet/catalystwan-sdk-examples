@@ -18,11 +18,19 @@ settings = session.endpoints.configuration_settings
 #     control_connection_up: True,
 # )
 
+# Org details
 organizations = settings.get_organizations()
-
 org_name = settings.get_organizations()[0].org
 validator_fqdn = settings.get_devices()[0].domain_ip
-print(f"Organization Name: {org_name}")
-print(settings.get_devices())
+print("\n~~~ Settings - Org Information")
+print(f" - Organization Name: {org_name}")
+print(f" - Validator fqdn: {validator_fqdn}")
+
+print("\n~~~ Settings -Devices")
+
+for item in settings.get_devices():
+    print("Validator:")
+    print(f" - domain_ip: {item.domain_ip}")
+    print(f" - port: {item.port}")
 
 session.close()
