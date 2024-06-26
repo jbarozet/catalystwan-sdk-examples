@@ -42,6 +42,6 @@ for controller in controllers:
 print("\n~~~ All devices used")
 devices = session.endpoints.monitoring_device_details.list_all_devices()
 for item in devices:
-    print(f" - uuid: {item.device_id} - hostname {item.host_name} - device_id: {item.device_id}")
+    print(f" - uuid: {item.uuid} - hostname {item.host_name} - device_id: {item.device_id}")
 
 session.close()
