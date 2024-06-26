@@ -287,14 +287,12 @@ def approute_device():
         rtr2_systemip = input("Enter Remote System IP address : ")
         color = input("Enter color : ")
 
-        # api_url = "/device/app-route/statistics?remote-system-ip=10.0.0.101&local-color=public-internet&remote-color=public-internet&deviceId=10.0.0.108"
         api_url = "/device/app-route/statistics?remote-system-ip=%s&local-color=%s&remote-color=%s&deviceId=%s" % (
             rtr2_systemip,
             color,
             color,
             rtr1_systemip,
         )
-        # api_url = "/device/app-route/statistics?deviceId=%s&local-color=%s"%(rtr1_systemip,color)
 
         url = base_url + api_url
 
