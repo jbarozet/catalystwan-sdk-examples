@@ -16,11 +16,15 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Create vManage session
 session = create_session()
 
-system_fp_id = session.api.sdwan_feature_profiles.system.create_profile(
-    "SDK - System", "System feature profile (SDK)"
+# Create Config Group with System Profile
+fp_id = session.api.sdwan_feature_profiles.system.create_profile("SystemFeatureProfile", "Description").id
+cg_id = session.api.config_group.create(
+    name="ConfigGroupName", description="Description", solution="sdwan", profile_ids=[fp_id]
 ).id
+print("ConfigGroup ID:", cg_id)
+print("FeatureProfile ID:", fp_id)
 
-# session.api.config_group.create(name=sd-routing,description="a basic config-group", solution="text", profile_ids=list)
-session.api.config_group.create("SDK - Config-Group", "Test Config Group description (SDK)", "sdwan", [system_fp_id])
-
-session.api.config_group.create("test_cg", "description", "sdwan")
+# Cleanup
+input("Press Enter to delete the ConfigGroup and FeatureProfile: ")
+session.api.config_group.delete(cg_id)
+session.api.sdwan_feature_profiles.system.delete_profile(fp_id)
