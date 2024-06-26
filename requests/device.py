@@ -37,6 +37,11 @@ def get_devices():
 
     type = "vedges"
 
+    # Configuration - Device Inventory
+    # Get devices details.
+    # When {deviceCategory = controllers}, it returns vEdge sync status, vBond, vManage and vSmart.
+    # When {deviceCategory = vedges}, it returns all available vEdge routers
+
     api_url = "/system/device/%s" % (type)
     url = base_url + api_url
 
