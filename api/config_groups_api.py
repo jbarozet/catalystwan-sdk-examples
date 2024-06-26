@@ -65,14 +65,12 @@ def get_groups():
     session.close()
 
 
-# Get profiles.
-# Filtering available with:
-#   profile = system_api.get_profiles().filter(profile_name="JMB_SDWAN_Basic").single_or_default()
+# Get profiles - Not yet available. Syntax may change.
 @click.command()
 def get_profiles():
     print("\n~~~ List of Features Profiles\n")
 
-    system_api = session.api.sdwan_feature_profiles.system
+    system_api = session.api.sdwan_feature_profiles
     print_profile_details(system_api)
 
     transport_api = session.api.sdwan_feature_profiles.transport
@@ -81,21 +79,17 @@ def get_profiles():
     service_api = session.api.sdwan_feature_profiles.service
     print_profile_details(service_api)
 
-    # Not implemented yet -catalystwan 0.33.7.dev6
     cli_api = session.api.sdwan_feature_profiles.cli
     print_profile_details(cli_api)
 
-    # Not implemented yet
-    # policy_api = session.api.sdwan_feature_profiles.policy_object
-    # print_profile_details(policy_api)
+    policy_api = session.api.sdwan_feature_profiles.policy_object
+    print_profile_details(policy_api)
 
-    # Not implemented yet
-    # system_api = session.api.sd_routing_feature_profiles.system
-    # print_profile_details(system_api)
+    system_api = session.api.sd_routing_feature_profiles.system
+    print_profile_details(system_api)
 
-    # Not implemented yet
-    # cli_api = session.api.sd_routing_feature_profiles.cli
-    # print_profile_details(cli_api)
+    cli_api = session.api.sd_routing_feature_profiles.cli
+    print_profile_details(cli_api)
 
     session.close()
 
