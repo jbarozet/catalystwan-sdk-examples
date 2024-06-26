@@ -9,8 +9,8 @@ session = create_session()
 
 
 def speedtest():
-    source_device = session.api.devices.get().filter(hostname="edge1").single_or_default()
-    destination_device = session.api.devices.get().filter(hostname="edge2").single_or_default()
+    source_device = session.api.devices.get().filter(hostname="ciscotme-cloud-fabric-cedge-1").single_or_default()
+    destination_device = session.api.devices.get().filter(hostname="ciscotme-cloud-fabric-cedge-2").single_or_default()
 
     speedtest = session.api.speedtest.speedtest(source_device, destination_device)
 
