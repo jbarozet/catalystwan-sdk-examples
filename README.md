@@ -56,8 +56,3 @@ Python examples organized as follows:
 - `endpoints` folder: examples based on catalystwan layer2, endpoints
 - `api` folder: examples based on catalystwan layer3, user APIs
 
-
-## Note
-
-Curently based on the dev branch of catalystwan SDK.
-You may want to change and use the latest official version.
