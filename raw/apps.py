@@ -6,8 +6,7 @@ import click
 import tabulate
 
 sys.path.insert(0, "..")
-
-from session import create_session
+from utils.session import create_session
 
 
 @click.group()

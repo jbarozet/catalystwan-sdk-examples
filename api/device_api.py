@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, "..")
 from catalystwan.dataclasses import Personality
 
-from session import create_session
+from utils.session import create_session
 
 # Create session
 session = create_session()

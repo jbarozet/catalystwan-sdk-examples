@@ -2,6 +2,7 @@ import os
 
 import urllib3
 from catalystwan.session import ManagerSession, create_manager_session
+from dotenv import load_dotenv
 
 # Disable warnings because of no certificate on vManage
 # urllib3.disable_warnings()
@@ -12,22 +13,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def create_session() -> ManagerSession:
     """Create vManage session"""
 
-    url = os.environ.get("vmanage_host")
-    user = os.environ.get("vmanage_user")
-    password = os.environ.get("vmanage_password")
+    load_dotenv()
+
+    url = os.getenv("vmanage_host")
+    user = os.getenv("vmanage_user")
+    password = os.getenv("vmanage_password")
 
     if url is None or user is None or password is None:
-        print("For Windows Workstation, vManage details must be set via environment variables using below commands")
-        print("set vmanage_host=10.10.1.1")
-        print("set vmanage_port=8443")
-        print("set vmanage_user=admin")
-        print("set vmanage_password=admin")
-        print("For MAC OSX Workstation, vManage details must be set via environment variables using below commands")
-        print("export vmanage_host=10.10.1.1")
-        print("export vmanage_port=8443")
-        print("export vmanage_user=admin")
-        print("export vmanage_password=admin")
+        print("Define vManage parameters in .env file")
         exit()
+
+    print(f"SD-WAN Manager: {url} - user: {user} - password: {password}")
 
     session = create_manager_session(url=url, username=user, password=password)
 

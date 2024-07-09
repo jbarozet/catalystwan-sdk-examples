@@ -5,6 +5,7 @@ It is intended to serve as a multiple session handler (provider, provider as a t
 The library is not dependent on environment which is being run in, you just need a connection to any vManage.
 
 Check it out:
+
 - https://github.com/cisco-open/cisco-catalyst-wan-sdk
 - https://pypi.org/project/catalystwan/
 
@@ -51,8 +52,7 @@ They will be dumped into catalystwan.log file.
 
 Python examples organized as follows:
 
-- `requests` folder: examples based on the requests library
+- `requests` folder: examples based on the requests library (without catalystwan SDK usage)
 - `raw` folder: examples based on catalystwan layer1
 - `endpoints` folder: examples based on catalystwan layer2, endpoints
 - `api` folder: examples based on catalystwan layer3, user APIs
-

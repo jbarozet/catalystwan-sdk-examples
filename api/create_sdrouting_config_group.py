@@ -3,7 +3,7 @@ import sys
 import urllib3
 
 sys.path.insert(0, "..")
-from session import create_session
+from utils.session import create_session
 
 # with create_manager_session(**login, logger=logger) as session:
 #     session.api.config_group.get()

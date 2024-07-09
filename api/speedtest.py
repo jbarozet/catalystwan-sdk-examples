@@ -1,8 +1,7 @@
 import sys
 
 sys.path.insert(0, "..")
-
-from session import create_session
+from utils.session import create_session
 
 # Create vManage session
 session = create_session()
