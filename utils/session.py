@@ -23,7 +23,7 @@ def create_session() -> ManagerSession:
         print("Define vManage parameters in .env file")
         exit()
 
-    print(f"SD-WAN Manager: {url} - user: {user} - password: {password}")
+    print(f"SD-WAN Manager: {url} - user: {user}")
 
     session = create_manager_session(url=url, username=user, password=password)
 
