@@ -4,6 +4,8 @@ catalystwan client is a package for creating simple and parallel automatic reque
 It is intended to serve as a multiple session handler (provider, provider as a tenant, tenant).
 The library is not dependent on environment which is being run in, you just need a connection to any vManage.
 
+![Architecture](./catalystwan-architecture.png)
+
 Check it out:
 
 - https://github.com/cisco-open/cisco-catalyst-wan-sdk
@@ -40,12 +42,11 @@ Install required Python packages:
 
 ## Usage
 
-Make sure you have the below environment variables defined:
+Make sure you have the below environment variables defined in .venv file:
 
 - vmanage_host
 - vmanage_user
 - vmanage_password
-- vmanage_port
 
 Use `export catalystwan_devel=true` if you want to have debug messsages.
 They will be dumped into catalystwan.log file.
