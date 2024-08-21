@@ -7,13 +7,16 @@
 # =========================================================================
 
 import sys
+from uuid import UUID
 
 import click
 
 sys.path.insert(0, "..")
-from catalystwan.endpoints.configuration_feature_profile import ConfigurationFeatureProfile
 from catalystwan.models.configuration.feature_profile.sdwan.system.aaa import AAAParcel
+from catalystwan.models.configuration.feature_profile.sdwan.system.basic import BasicParcel
 from catalystwan.models.configuration.feature_profile.sdwan.system.bfd import BFDParcel
+from catalystwan.models.configuration.feature_profile.sdwan.system.global_parcel import GlobalParcel
+from catalystwan.models.configuration.feature_profile.sdwan.system.logging_parcel import LoggingParcel
 from catalystwan.models.configuration.feature_profile.sdwan.system.omp import OMPParcel
 from catalystwan.models.configuration.feature_profile.sdwan.transport.vpn import TransportVpnParcel
 
@@ -35,10 +38,39 @@ def print_profile_details(api):
             print(f"  - Created by: {item.created_by}")
             print(f"  - Last updated by: {item.last_updated_by}")
             print(f"  - Last updated on: {item.last_updated_on}")
-            # parcels = api.get_parcels(profile_id=item.profile_id, parcel_type=AAAParcel)
-            # for item in parcels:
-            #     payload = item.model_dump_json()
-            #     print(payload)
+
+
+def print_parcel_details(parcel_list):
+    for parcel in parcel_list:
+        print(f"** Parcel: {parcel.parcel_type}")
+        print(f"  - id: {parcel.parcel_id}")
+        print(f"  - type: {parcel.parcel_type}")
+        print(f"  - name: {parcel.payload.parcel_name}")
+        print(f"  - description: {parcel.payload.parcel_description}")
+        print(f"  - Payload: {parcel.payload.model_dump_json(by_alias=True, indent=4)}")
+
+
+def print_system_parcel_details(profile_id: UUID):
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, GlobalParcel)
+    print_parcel_details(parcel_list)
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, BasicParcel)
+    print_parcel_details(parcel_list)
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, AAAParcel)
+    print_parcel_details(parcel_list)
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, OMPParcel)
+    print_parcel_details(parcel_list)
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, LoggingParcel)
+    print_parcel_details(parcel_list)
+    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels(profile_id, BFDParcel)
+    print_parcel_details(parcel_list)
+
+
+def print_transport_parcel_details(profile_id: UUID):
+    print("not implemented")
+
+
+def print_service_parcel_details(profile_id: UUID):
+    print("not implemented")
 
 
 @click.group()
@@ -77,63 +109,48 @@ def get_groups():
 def get_profiles():
     print("\n~~~ List of Features Profiles\n")
 
-    # system_api = session.api.sdwan_feature_profiles.system
+    system_api = session.api.sdwan_feature_profiles.system
+    print_profile_details(system_api)
 
-    profile_list = session.api.sdwan_feature_profiles.system.get_profiles()
-    print(profile_list)
-    if profile_list is not None:
-        for profile in profile_list:
-            print(f"\n~~~ Profile ID: {profile.profile_id}")
-            print(f"  - name: {profile.profile_name}")
-            print(f"  - solution: {profile.solution}")
-            print(f"  - type: {profile.profile_type}")
-            print(f"  - last updated: {profile.last_updated_on} by {profile.last_updated_by}")
+    transport_api = session.api.sdwan_feature_profiles.transport
+    print_profile_details(transport_api)
 
-    parcel_list = session.api.sdwan_feature_profiles.system.get_parcels("80779dbb-174d-4039-a054-467fe2e897bc", BFDParcel)
-    print(parcel_list)
-    if parcel_list is not None:
-        for parcel in parcel_list:
-            print("~~~ System Parcel")
-            print(f"  - id: {parcel.parcel_id}")
-            print(f"  - type: {parcel.parcel_type}")
-            print(f"  - name: {parcel.payload.parcel_name}")
-            print(f"  - description: {parcel.payload.parcel_description}")
-            parcel.payload.model_dump_json(by_alias=True, indent=4)
-
-    # parcel_list = session.api.sdwan_feature_profiles.transport.get_parcels("59f09d1b-07d4-4597-960c-2760fb199c17", TransportVpnParcel)
-    # print(parcel_list)
-
-    # parcel_list = session.api.sdwan_feature_profiles.system.get_parcels("80779dbb-174d-4039-a054-467fe2e897bc", OMPParcel)
-    # print(parcel_list)
-
-    # print_profile_details(system_api)
-
-    # transport_api = session.api.sdwan_feature_profiles.transport
-    # print_profile_details(transport_api)
-
-    # service_api = session.api.sdwan_feature_profiles.service
-    # print_profile_details(service_api)
-
-    # cli_api = session.api.sdwan_feature_profiles.cli
-    # print_profile_details(cli_api)
-
-    # policy_api = session.api.sdwan_feature_profiles.policy_object
-    # print_profile_details(policy_api)
-
-    # system_api = session.api.sd_routing_feature_profiles.system
-    # print_profile_details(system_api)
-
-    # cli_api = session.api.sd_routing_feature_profiles.cli
-    # print_profile_details(cli_api)
-
-    session.close()
+    service_api = session.api.sdwan_feature_profiles.service
+    print_profile_details(service_api)
 
 
-cli.add_command(get_groups)
-cli.add_command(get_profiles)
+@click.command()
+def get_parcels():
+    profile_name = input("Enter Profile Name: ")
 
-# Create vManage session
-session = create_session()
+    profile = session.api.sdwan_feature_profiles.system.get_profiles().filter(profile_name=profile_name).single_or_default()
+    if profile is not None:
+        print("~~~ System Profile")
+        profile_id = profile.profile_id
+        print_system_parcel_details(profile_id)
+        exit(0)
+
+    profile = session.api.sdwan_feature_profiles.transport.get_profiles().filter(profile_name=profile_name).single_or_default()
+    if profile is not None:
+        print("~~~ Transport Profile")
+        profile_id = profile.profile_id
+        print_transport_parcel_details(profile_id)
+        exit(0)
+
+    profile = session.api.sdwan_feature_profiles.service.get_profiles().filter(profile_name=profile_name).single_or_default()
+    if profile is not None:
+        print("~~~ Service Profile")
+        profile_id = profile.profile_id
+        print_service_parcel_details(profile_id)
+        exit(0)
+
+    print(f"  - Profile does not exist: {profile_name}")
+
 
 if __name__ == "__main__":
-    cli()
+    cli.add_command(get_groups)
+    cli.add_command(get_profiles)
+    cli.add_command(get_parcels)
+
+    with create_session() as session:
+        cli()
