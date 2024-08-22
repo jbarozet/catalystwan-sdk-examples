@@ -42,7 +42,7 @@ Install required Python packages:
 
 ## Usage
 
-Make sure you have the below environment variables defined in .venv file:
+Make sure you have the below environment variables defined in `.env` file:
 
 - vmanage_host
 - vmanage_user
