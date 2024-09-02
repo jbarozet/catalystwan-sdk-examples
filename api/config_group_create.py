@@ -11,6 +11,11 @@ from catalystwan.models.common import SubnetMask
 from catalystwan.models.configuration.feature_profile.sdwan.system.bfd import BFDParcel
 from catalystwan.models.configuration.feature_profile.sdwan.system.omp import OMPParcel
 from catalystwan.models.configuration.feature_profile.sdwan.transport.vpn import TransportVpnParcel
+from catalystwan.models.configuration.feature_profile.sdwan.transport.wan.interface.ethernet import (
+    InterfaceDynamicIPv4Address,
+    InterfaceEthernetParcel,
+    InterfaceStaticIPv4Address,
+)
 from catalystwan.session import ManagerSession
 
 from utils.session import create_session
@@ -33,7 +38,7 @@ def configure_system_profile(session: ManagerSession) -> UUID:
 
     # Check there is no existing template with the same name
     if existing_profile is not None:
-        existing_profile_id = existing_profile.id
+        existing_profile_id = existing_profile.profile_id
         print(f"  - Profile already exist: {existing_profile_id}")
         print("  - profile deleted")
         session.api.sdwan_feature_profiles.system.delete_profile(existing_profile_id)
@@ -75,28 +80,39 @@ def configure_transport_profile(session: ManagerSession) -> UUID:
     existing_profile = session.api.sdwan_feature_profiles.transport.get_profiles().filter(profile_name=profile_name).single_or_default()
 
     if existing_profile is not None:
-        existing_profile_id = existing_profile.id
+        existing_profile_id = existing_profile.profile_id
         print(f"  - Profile already exist: {existing_profile_id}")
         print("  - profile deleted")
         session.api.sdwan_feature_profiles.transport.delete_profile(existing_profile_id)
 
-    # Create new transport profile
+    # --- Create new transport profile
     profile_id = session.api.sdwan_feature_profiles.transport.create_profile(profile_name, profile_description).id
     print(f"  - Transport Profile ID: {profile_id}")
 
-    # Create VPN Parcel
+    # --- Create VPN Parcel
     vpn = TransportVpnParcel(parcel_name="SDK_VPN0_Parcel")
     # vpn.vpn_id = as_global(0) # this is a frozen paraneter - always 0
 
     vpn.set_dns_ipv4(as_global("172.16.1.254"), as_global("172.16.2.254"))
 
-    # prefix = as_global(IPv4Address("0.0.0.0"))
-    # mask = as_global("0.0.0.0")
-    # next_hops = ["172.16.1.254", "172.16.2.254"]
-    # vpn.add_ipv4_route(prefix_ip_address=prefix, prefix_mask_address=mask, next_hops=next_hops)
-
+    prefix = as_global(IPv4Address("0.0.0.0"))
+    mask = as_global("0.0.0.0", SubnetMask)
+    next_hops = [
+        (as_global(IPv4Address("172.16.1.254")), as_global(1)),
+        (as_global(IPv4Address("172.16.2.254")), as_global(8)),
+    ]
+    vpn.add_ipv4_route(prefix, mask, next_hops)
     parcel_id = session.api.sdwan_feature_profiles.transport.create_parcel(profile_id, vpn).id
     print(f"  - VPN parcel: {parcel_id}")
+
+    # --- Create VPN0 Transport Interfaces
+
+    # interface = InterfaceEthernetParcel(parcel_name="SDK_VPN0_Interface_mpls_Parcel")
+    # interface.interface_name = as_global("GigabitEthernet4")
+    # interface.interface_description = as_global("mpls")
+    # interface.interface_ip_address = InterfaceDynamicIPv4Address()
+    # interface.tunnel_interface = as_global("on")
+    # parcel_id = session.api.sdwan_feature_profiles.transport.create_parcel(profile_id, interface).id
 
     return profile_id
 
@@ -115,7 +131,7 @@ def configure_service_profile(session: ManagerSession) -> UUID:
     existing_profile = session.api.sdwan_feature_profiles.service.get_profiles().filter(profile_name=profile_name).single_or_default()
 
     if existing_profile is not None:
-        existing_profile_id = existing_profile.id
+        existing_profile_id = existing_profile.profile_id
         print(f"  - Profile already exist: {existing_profile_id}")
         print("  - profile deleted")
         session.api.sdwan_feature_profiles.service.delete_profile(existing_profile_id)
