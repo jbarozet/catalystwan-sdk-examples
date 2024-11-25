@@ -5,25 +5,31 @@ import sys
 sys.path.insert(0, "..")
 from utils.session import create_session
 
-# Create session
-session = create_session()
-
-# Get list of devices
-url_base = "dataservice/system/device/vedges"
-payload = session.get(url_base).json()
-devices = payload["data"]  # Get rid of header section and only keep data
-
 # Create payload folder
-path = "./payloads"
-if not os.path.exists(path):
-    os.mkdir(path)
-    print("\n~~~ Folder %s created!" % path)
+data_dir = "./payloads/"
+filename_data = "".join([data_dir, "payload_devices_data.json"])
+filename_payload = "".join([data_dir, "payload_devices_all.json"])
+if not os.path.exists(data_dir):
+    os.mkdir(data_dir)
+    print("\n~~~ Folder %s created!" % data_dir)
 else:
-    print("\n~~~ Folder %s already exists" % path)
+    print("\n~~~ Folder %s already exists" % data_dir)
 
-# Dump devices to json
-print("\n~~~ Saving payload in file payloads/payload_devices.json")
-with open("payloads/payload_devices.json", "w") as file:
-    json.dump(devices, file, indent=4)
 
-session.close()
+with create_session() as session:
+    # Get list of devices
+    url_base = "dataservice/system/device/vedges"
+    payload = session.get(url_base).json()
+
+    # Get rid of header section and only keep data
+    devices = payload["data"]
+
+    # Dump entire payload to file
+    print(f"\n~~~ Saving payload in {filename_payload}")
+    with open(filename_payload, "w") as file:
+        json.dump(payload, file, indent=4)
+
+    # Dump payload data (device list) to file
+    print(f"\n~~~ Saving payload in {filename_data}")
+    with open(filename_data, "w") as file:
+        json.dump(devices, file, indent=4)
