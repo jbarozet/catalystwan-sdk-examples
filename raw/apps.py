@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import traceback
 
 import click
 import tabulate
@@ -74,19 +75,15 @@ def approute_device():
     """
 
     try:
-
         rtr1_systemip = input("Enter System IP address : ")
         rtr2_systemip = input("Enter Remote System IP address : ")
         color = input("Enter color : ")
 
-        api_url = (
-            "/dataservice/device/app-route/statistics?remote-system-ip=%s&local-color=%s&remote-color=%s&deviceId=%s"
-            % (
-                rtr2_systemip,
-                color,
-                color,
-                rtr1_systemip,
-            )
+        api_url = "/dataservice/device/app-route/statistics?remote-system-ip=%s&local-color=%s&remote-color=%s&deviceId=%s" % (
+            rtr2_systemip,
+            color,
+            color,
+            rtr1_systemip,
         )
 
         response = session.get(api_url)
@@ -129,7 +126,7 @@ def approute_device():
             click.echo("Failed to retrieve app route statistics\n")
 
     except Exception as e:
-        print("Exception line number: {}".format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        print(f"Exception at line {traceback.extract_tb(e.__traceback__)[-1].lineno}: {type(e).__name__} - {str(e)}")
 
 
 # Create vManage session
