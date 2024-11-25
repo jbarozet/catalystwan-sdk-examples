@@ -1,4 +1,5 @@
 import os
+import sys
 
 import urllib3
 from catalystwan.session import ManagerSession, create_manager_session
@@ -9,28 +10,43 @@ from dotenv import load_dotenv
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-# Create vManage session
 def create_session() -> ManagerSession:
-    """Create vManage session"""
+    """
+    Create vManage session with error handling.
 
-    load_dotenv()
+    Returns:
+        ManagerSession: Authenticated session to vManage
 
-    url = os.getenv("vmanage_host")
-    user = os.getenv("vmanage_user")
-    password = os.getenv("vmanage_password")
+    Raises:
+        SystemExit: If environment variables are missing or connection fails
+    """
+    try:
+        load_dotenv()
 
-    if url is None or user is None or password is None:
-        print("Define vManage parameters in .env file")
-        exit()
+        url = os.getenv("vmanage_host")
+        user = os.getenv("vmanage_user")
+        password = os.getenv("vmanage_password")
 
-    print(f"SD-WAN Manager: {url} - user: {user}")
+        if not all([url, user, password]):
+            raise ValueError("Missing required vManage parameters in .env file")
 
-    session = create_manager_session(url=url, username=user, password=password)
+        print(f"~~~ Connecting to SD-WAN Manager: {url} - user: {user} ...")
 
-    print("~~~  Session Information")
-    print(f" - vManage: {session.url}")
-    print(f" - Version: {session.about().version}")
-    print(f" - API Version: {session.api_version}")
-    print(f" - Application Version: {session.about().application_version}")
+        session = create_manager_session(url=url, username=user, password=password)
 
-    return session
+        # Validate connection by getting version info
+        about = session.about()
+
+        print(f" - vManage: {session.base_url}")
+        print(f" - Version: {about.version}")
+        print(f" - API Version: {session.api_version}")
+        print(f" - Application Version: {about.application_version}")
+
+        return session
+
+    except ValueError as e:
+        print(f"Configuration Error: {str(e)}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Failed to connect to vManage: {str(e)}")
+        sys.exit(1)
