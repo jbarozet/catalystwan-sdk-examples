@@ -7,24 +7,10 @@ sys.path.insert(0, "..")
 from ipaddress import IPv4Address, IPv6Address, IPv6Interface
 from uuid import UUID
 
-from catalystwan.api.configuration_groups.parcel import (
-    as_default,
-    as_global,
-    as_variable,
-)
+from catalystwan.api.configuration_groups.parcel import Default, Global, Variable, as_default, as_global, as_variable
 from catalystwan.models.common import SubnetMask
-from catalystwan.models.configuration.feature_profile.common import (
-    DynamicDhcpDistance,
-)
-from catalystwan.models.configuration.feature_profile.sdwan.system.bfd import (
-    BFDParcel,
-)
-from catalystwan.models.configuration.feature_profile.sdwan.system.omp import (
-    OMPParcel,
-)
-from catalystwan.models.configuration.feature_profile.sdwan.transport.vpn import (
-    TransportVpnParcel,
-)
+from catalystwan.models.configuration.feature_profile.sdwan.system import BFDParcel, OMPParcel
+from catalystwan.models.configuration.feature_profile.sdwan.transport import TransportVpnParcel
 from catalystwan.models.configuration.feature_profile.sdwan.transport.wan.interface.ethernet import (
     Encapsulation,
     InterfaceDynamicIPv4Address,
@@ -65,9 +51,9 @@ def configure_system_profile(session: ManagerSession) -> UUID:
 
     # Create OMP Parcel
     omp = OMPParcel(parcel_name="SDK_OMP_Parcel")
-    # omp.holdtime = as_default(60)
+    omp.holdtime = as_global(60)
     # omp.holdtime = as_variable("HoldTime")
-    omp.holdtime = as_global(40)
+    # omp.holdtime = Global(40)
     parcel_id = session.api.sdwan_feature_profiles.system.create_parcel(profile_id, omp).id
     print(f"  - OMP parcel: {parcel_id}")
     # print(omp.model_dump_json(by_alias=True, indent=4))
@@ -77,7 +63,6 @@ def configure_system_profile(session: ManagerSession) -> UUID:
     bfd.poll_interval = as_global(50000)
     parcel_id = session.api.sdwan_feature_profiles.system.create_parcel(profile_id, bfd).id
     print(f"  - BFD parcel: {parcel_id}")
-    # print(bfd.model_dump_json(by_alias=True, indent=4))
 
     return profile_id
 
@@ -109,12 +94,12 @@ def configure_transport_profile(session: ManagerSession) -> UUID:
     vpn = TransportVpnParcel(parcel_name="SDK_VPN0_Parcel")
     # vpn.vpn_id = as_global(0) # this is a frozen parameter - always 0
 
-    dns1 = as_global("172.16.1.254")
-    dns2 = as_global("172.16.2.254")
+    dns1 = as_global(IPv4Address("172.16.1.254"))
+    dns2 = as_global(IPv4Address("172.16.2.254"))
     vpn.set_dns_ipv4(dns1, dns2)
 
     prefix = as_global(IPv4Address("0.0.0.0"))
-    mask = as_global("0.0.0.0", SubnetMask)
+    mask = as_global("0.0.0.0", generic_alias=SubnetMask)
     next_hops = [
         (as_global(IPv4Address("172.16.1.254")), as_global(1)),
         (as_global(IPv4Address("172.16.2.254")), as_global(8)),
@@ -125,16 +110,16 @@ def configure_transport_profile(session: ManagerSession) -> UUID:
 
     # --- Create VPN0 Transport Interfaces
     # encapsulation = Encapsulation(encap=as_global("ipsec", Literal["ipsec", "gre"]))
-    encapsulation = Encapsulation()
-    interface = InterfaceEthernetParcel(
-        parcel_name="SDK_VPN0_Interface_mpls_Parcel",
-        encapsulation=encapsulation,
-        interface_name=as_global("GigabitEthernet1"),
-    )
-    interface.interface_description = as_global("mpls")
-    # interface.interface_ip_address = InterfaceDynamicIPv4Address(dynamic=DynamicDhcpDistance())
-    # interface.tunnel_interface = as_global("on")
-    parcel_id = session.api.sdwan_feature_profiles.transport.create_parcel(profile_id, interface).id
+    # encapsulation = [Encapsulation()]
+    # interface = InterfaceEthernetParcel(
+    #     parcel_name="SDK_VPN0_Interface_mpls_Parcel",
+    #     encapsulation=encapsulation,
+    #     interface_name=as_global("GigabitEthernet1"),
+    # )
+    # interface.interface_description = as_global("mpls")
+    # # interface.interface_ip_address = InterfaceDynamicIPv4Address(dynamic=DynamicDhcpDistance())
+    # # interface.tunnel_interface = as_global("on")
+    # parcel_id = session.api.sdwan_feature_profiles.transport.create_parcel(profile_id, interface).id
 
     return profile_id
 

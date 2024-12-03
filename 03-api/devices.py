@@ -14,7 +14,6 @@ session = create_session()
 
 # Get the list of all devices
 devices = session.api.devices.get()
-
 count = session.api.devices.count_devices(personality=Personality.EDGE)
 print(f"\nNumber of WAN Edge devices in the fabric: {count}")
 
@@ -33,11 +32,11 @@ for item in vsmarts:
 print("\n~~~ Reachable devices")
 reachable_devices = devices.filter(personality=Personality.EDGE, reachability="reachable")
 for dev in reachable_devices:
-    print(f" - {dev.hostname} - Board serial: {dev.board_serial} - UUID: {dev.uuid} - CPU: {dev.cpu_load}")
+    print(f" - {dev.hostname} - {dev.local_system_ip} - Board serial: {dev.board_serial} - UUID: {dev.uuid} - CPU: {dev.cpu_load}")
 
 # Filter devices
 edge1 = devices.filter(hostname="Edge1").single_or_default()
-print("\n~~~ SD-WAN edge1")
+print("\n~~~ Filtering SD-WAN edge1")
 print(f" - Edge: {edge1.hostname} - uuid: {edge1.uuid} - cpu: {edge1.cpu_load}")
 
 # Device Health
