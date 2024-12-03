@@ -10,23 +10,16 @@ import logging
 import os
 from datetime import datetime
 
+from dotenv import load_dotenv
 from manager import ConfigGroupTable, MyManager, SDRoutingProfileTable, SDWANProfileTable
 from prompt import Prompt
+
 from utils import Workdir
 
 
 def help():
-    print("For Windows Workstation, vManage details must be set via environment variables using below commands")
-    print("set vmanage_host=10.10.1.1")
-    print("set vmanage_port=8443")
-    print("set vmanage_user=admin")
-    print("set vmanage_password=some_password")
-    print("")
-    print("For MAC OSX Workstation, vManage details must be set via environment variables using below commands")
-    print("export vmanage_host=10.10.1.1")
-    print("export vmanage_port=8443")
-    print("export vmanage_user=admin")
-    print("export vmanage_password=some_password")
+    print("Define vManage parameters in .env file")
+    exit(1)
 
 
 def backup():
@@ -111,9 +104,11 @@ def quit():
 
 
 def create_session():
-    url = os.environ.get("vmanage_host")
-    user = os.environ.get("vmanage_user")
-    password = os.environ.get("vmanage_password")
+    load_dotenv()
+
+    url = os.getenv("vmanage_host")
+    user = os.getenv("vmanage_user")
+    password = os.getenv("vmanage_password")
 
     if url is None or user is None or password is None:
         help()
