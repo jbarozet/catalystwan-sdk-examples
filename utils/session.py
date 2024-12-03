@@ -32,7 +32,7 @@ def create_session() -> ManagerSession:
 
         print(f"~~~ Connecting to SD-WAN Manager: {url} - user: {user} ...")
 
-        session = create_manager_session(url=url, username=user, password=password)
+        session = create_manager_session(url=str(url), username=str(user), password=str(password))
 
         # Validate connection by getting version info
         about = session.about()
