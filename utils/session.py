@@ -30,17 +30,18 @@ def create_session() -> ManagerSession:
         if not all([url, user, password]):
             raise ValueError("Missing required vManage parameters in .env file")
 
-        print(f"~~~ Connecting to SD-WAN Manager: {url} - user: {user} ...")
+        print(f"\n- Connecting to SD-WAN Manager: {url} - user: {user} ...")
 
         session = create_manager_session(url=str(url), username=str(user), password=str(password))
 
         # Validate connection by getting version info
         about = session.about()
 
-        print(f" - vManage: {session.base_url}")
-        print(f" - Version: {about.version}")
-        print(f" - API Version: {session.api_version}")
-        print(f" - Application Version: {about.application_version}")
+        print(f"- vManage: {session.base_url}")
+        print(f"- Version: {about.version}")
+        print(f"- API Version: {session.api_version}")
+        print(f"- Application Version: {about.application_version}")
+        print("")
 
         return session
 
