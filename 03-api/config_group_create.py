@@ -53,9 +53,9 @@ def configure_system_profile(session: ManagerSession) -> UUID:
 
     # Create OMP Parcel
     omp = OMPParcel(parcel_name="SDK_OMP_Parcel")
-    omp.holdtime = Global(value=60)
+    omp.holdtime = as_global(value=60)
     # omp.holdtime = as_variable("HoldTime")
-    omp.holdtime = Global(value=40)
+    # omp.holdtime = Global(value=40)
     parcel_id = system_api.create_parcel(profile_id, omp).id
     print(f"  - OMP parcel: {parcel_id}")
 
