@@ -35,6 +35,7 @@ def delete_config_group(session: ManagerSession):
         config_group_id = config_group.id
         session.api.config_group.delete(config_group_id)
         print(f"- Existing Config Group {config_group_name} deleted: {config_group_id}")
+        return
 
     print(f"- Config Group {config_group_name} not found")
 
