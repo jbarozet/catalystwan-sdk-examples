@@ -5,6 +5,7 @@ crash.log
 #--- Project ------------------------
 **/payloads
 **/data
+NOTES.md
 sastre_backup
 init.sh
 requests/devices.json
