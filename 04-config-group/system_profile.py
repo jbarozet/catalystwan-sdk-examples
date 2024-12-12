@@ -52,14 +52,14 @@ def create_system_profile(session: ManagerSession) -> UUID:
     # Create OMP Parcel
     omp = OMPParcel(parcel_name="SDK_OMP_Parcel", ignore_region_path_length=None, transport_gateway=None, site_types_for_transport_gateway=None)
     # omp.holdtime = cast(Global[int], as_global(value=60))
-    omp.holdtime = Global(value=60)
+    omp.holdtime = as_global(60)
     # omp.holdtime = as_variable("HoldTime")
     parcel_id = system_api.create_parcel(profile_id, omp).id
     print(f"- OMP parcel: {parcel_id}")
 
     # Create BFD Parcel
     bfd = BFDParcel(parcel_name="SDK_BFD_Parcel")
-    bfd.poll_interval = Global(value=50000)
+    bfd.poll_interval = as_global(50000)
     parcel_id = system_api.create_parcel(profile_id, bfd).id
     print(f"- BFD parcel: {parcel_id}")
 
