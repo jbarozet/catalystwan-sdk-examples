@@ -8,8 +8,9 @@ The library is not dependent on environment which is being run in, you just need
 
 Check it out:
 
-- https://github.com/cisco-open/cisco-catalyst-wan-sdk
-- https://pypi.org/project/catalystwan/
+- <https://github.com/cisco-en-programmability/catalystwan-sdk>
+- <https://github.com/cisco-open/cisco-catalyst-wan-sdk> (archived)
+- <https://pypi.org/project/catalystwan/>
 
 This repository just gives a few examples of how to use catalystwan SDK.
 
@@ -51,7 +52,7 @@ Make sure you have the below environment variables defined in `.env` file:
 Use `export catalystwan_devel=true` if you want to have debug messsages.
 They will be dumped into catalystwan.log file.
 
-Python examples organized as follows:
+Python examples are organized as follows:
 
 - `requests` folder: examples based on the requests library (without catalystwan SDK usage)
 - `raw` folder: examples based on catalystwan layer1
