@@ -2,15 +2,17 @@
 .DS_Store
 **/_archives
 crash.log
-logs/
-
 #--- Project ------------------------
-data
+**/payloads
+**/data
 sastre_backup
 init.sh
+requests/devices.json
+.env.bak
 catalystwan.log
 requests/devices.json
 **/sdwan.log
+logs/
 #--- python -------------------------
 __pycache__/
 *.py[cod]
@@ -26,6 +28,6 @@ venv.bak/
 #--- IDE project files --------------
 .vscode/
 *.code-workspace
-.idea
-payloads
-requests/devices.json
+.zed
+ruff.toml
+.ruff_cache
