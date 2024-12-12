@@ -77,8 +77,6 @@ def create_transport_profile(session: ManagerSession) -> UUID:
     print(f"- VPN parcel: {vpn_parcel_id}")
 
     # Create VPN0 Transport Interfaces
-    # encapsulation = Encapsulation(encap=as_global("ipsec", Literal["ipsec", "gre"]))
-    # encapsulation = [Encapsulation()]
     interface_name = as_global("GigabitEthernet1")
     encap_value = Global[Literal["ipsec", "gre"]](option_type="global", value="ipsec")
     encapsulation = Encapsulation(encap=encap_value, preference=as_global(100), weight=as_global(1))
