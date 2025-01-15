@@ -1,141 +1,184 @@
+#! /usr/bin/env python3
+
+import cmd
 import json
 import os
 import sys
-import traceback
 
 import click
+import requests
 import tabulate
 
 sys.path.insert(0, "..")
 from utils.session import create_session
 
+# ----------------------------------------------------------------------------------------------------
+# Click CLI
+# ----------------------------------------------------------------------------------------------------
+
 
 @click.group()
 def cli():
-    """Command line tool to showcase Catalyst SD-WAN Python SDK"""
+    """Command line tool for to collect application names."""
     pass
+
+
+# ----------------------------------------------------------------------------------------------------
+# app-list
+# ----------------------------------------------------------------------------------------------------
 
 
 @click.command()
 def app_list():
     """Retrieve the list of Applications.
-    Example command: ./apps.py app-list
-    """
-    # Using raw APIs
-    response = session.get("/dataservice/device/dpi/application-mapping")
-    payload = response.json()
-
-    # Create payload folder
-    path = "./payloads"
-    if not os.path.exists(path):
-        os.mkdir(path)
-        print("\n~~~ Folder %s created!" % path)
-    else:
-        print("\n~~~ Folder %s already exists" % path)
-
-    print("\n~~~ Saving payload in file payloads/payload_app_list.json")
-    with open("payloads/payload_app_list.json", "w") as file:
-        json.dump(payload, file, indent=4)
-
-    # Format output
-    table = list()
-    app_headers = ["App name", "Family", "ID"]
-
-    for item in payload["data"]:
-        tr = [item["name"], item["family"], item["appId"]]
-        table.append(tr)
-
-    click.echo(tabulate.tabulate(table, app_headers, tablefmt="fancy_grid"))
-
-
-@click.command()
-def approute_fields():
-    """Retrieve App route Aggregation API Query fields.
-    Example command: ./apps.py approute-fields
-    """
-    # Using raw APIs
-    response = session.get("/dataservice/statistics/approute/fields")
-    payload = response.json()
-
-    # Format output
-    table = list()
-    app_headers = ["Property", "Type"]
-
-    for item in payload:
-        tr = [item["property"], item["dataType"]]
-        table.append(tr)
-
-    click.echo(tabulate.tabulate(table, app_headers, tablefmt="fancy_grid"))
-
-
-@click.command()
-def approute_device():
-    """Get Realtime Approute statistics for a specific tunnel for provided router and remote.
-    Example command: ./monitor-app-route-stats.py approute-device
+    Example command: python apps.py app-list
     """
 
-    try:
-        rtr1_systemip = input("Enter System IP address : ")
-        rtr2_systemip = input("Enter Remote System IP address : ")
-        color = input("Enter color : ")
+    with create_session() as session:
 
-        api_url = "/dataservice/device/app-route/statistics?remote-system-ip=%s&local-color=%s&remote-color=%s&deviceId=%s" % (
-            rtr2_systemip,
-            color,
-            color,
-            rtr1_systemip,
-        )
-
-        response = session.get(api_url)
+        url = "dataservice/device/dpi/application-mapping"
+        response = session.get(url)
 
         if response.status_code == 200:
-            app_route_stats = response.json()["data"]
-            app_route_stats_headers = [
-                "vdevice-host-name",
-                "remote-system-ip",
-                "Index",
-                "Mean Latency",
-                "Mean Jitter",
-                "Mean Loss",
-                "average-latency",
-                "average-jitter",
-                "loss",
-            ]
-            table = list()
-
-            click.echo("\nRealtime App route statistics for %s to %s\n" % (rtr1_systemip, rtr2_systemip))
-            for item in app_route_stats:
-                tr = [
-                    item["vdevice-host-name"],
-                    item["remote-system-ip"],
-                    item["index"],
-                    item["mean-latency"],
-                    item["mean-jitter"],
-                    item["mean-loss"],
-                    item["average-latency"],
-                    item["average-jitter"],
-                    item["loss"],
-                ]
-                table.append(tr)
-            try:
-                click.echo(tabulate.tabulate(table, app_route_stats_headers, tablefmt="fancy_grid"))
-            except UnicodeEncodeError:
-                click.echo(tabulate.tabulate(table, app_route_stats_headers, tablefmt="grid"))
-
+            items = response.json()
+            app_headers = ["App name", "Family", "ID"]
         else:
-            click.echo("Failed to retrieve app route statistics\n")
+            click.echo("Failed to get list of Apps " + str(response.text))
+            exit()
 
-    except Exception as e:
-        print(f"Exception at line {traceback.extract_tb(e.__traceback__)[-1].lineno}: {type(e).__name__} - {str(e)}")
+        table = list()
+        # cli = cmd.Cmd()
+
+        for item in items["data"]:
+            tr = [item["name"], item["family"], item["appId"]]
+            table.append(tr)
+
+        click.echo(tabulate.tabulate(table, app_headers, tablefmt="fancy_grid"))
 
 
-# Create vManage session
-session = create_session()
+# ----------------------------------------------------------------------------------------------------
+# app-list-2
+# Display app-name and family in multi-column view
+# ----------------------------------------------------------------------------------------------------
 
+
+@click.command()
+def app_list_2():
+    """Retrieve the list of Applications.
+    Example command: python apps.py app-list-2
+    """
+
+    with create_session() as session:
+
+        url = "dataservice/device/dpi/application-mapping"
+        response = session.get(url)
+
+        if response.status_code == 200:
+            items = response.json()
+        else:
+            click.echo("Failed to get list of Apps " + str(response.text))
+            exit()
+
+        table = list()
+        cli = cmd.Cmd()
+
+        for item in items["data"]:
+            # print(item['name'])
+            table.append(item["name"] + "(" + item["family"] + ")")
+
+        click.echo(cli.columnize(table, displaywidth=120))
+
+
+# ----------------------------------------------------------------------------------------------------
+# app-list
+# ----------------------------------------------------------------------------------------------------
+
+
+@click.command()
+def app_list_json():
+    """Retrieve the list of Applications and save payload in json file
+    Example command: python apps.py app-list-json
+    """
+
+    data_dir = "./payloads/"
+    filename_data = "".join([data_dir, "payload_apps_data.json"])
+    filename_payload = "".join([data_dir, "payload_apps_all.json"])
+
+    with create_session() as session:
+
+        url = "dataservice/device/dpi/application-mapping"
+        response = session.get(url)
+
+        if response.status_code == 200:
+            payload = response.json()
+            # Get rid of header section and only keep data
+            data = payload["data"]
+        else:
+            click.echo("Failed to get list of Apps " + str(response.text))
+            exit()
+
+        # Create payload folder
+        if not os.path.exists(data_dir):
+            os.mkdir(data_dir)
+            print("\n~~~ Folder %s created!" % data_dir)
+        else:
+            print("\n~~~ Folder %s already exists" % data_dir)
+
+        # Dump entire payload to file
+        print(f"\n~~~ Saving payload in {filename_payload}")
+        with open(filename_payload, "w") as file:
+            json.dump(payload, file, indent=4)
+
+        # Dump payload data (device list) to file
+        print(f"\n~~~ Saving payload in {filename_data}")
+        with open(filename_data, "w") as file:
+            json.dump(data, file, indent=4)
+
+
+# ----------------------------------------------------------------------------------------------------
+# qosmos-list
+# ----------------------------------------------------------------------------------------------------
+
+
+@click.command()
+def qosmos_list():
+    """Retrieve the list of Qosmos Applications.
+    Example command: python apps.py qosmos-list
+    """
+
+    with create_session() as session:
+
+        url = "dataservice/device/dpi/qosmos-static/applications"
+        response = session.get(url)
+
+        if response.status_code == 200:
+            items = response.json()
+            app_headers = ["App name", "Family", "ID"]
+        else:
+            click.echo("Failed to get list of Apps " + str(response.text))
+            exit()
+
+        table = list()
+        cli = cmd.Cmd()
+
+        for item in items["data"]:
+            tr = [item["name"], item["family"], item["appId"]]
+            table.append(tr)
+
+        click.echo(tabulate.tabulate(table, app_headers, tablefmt="fancy_grid"))
+
+
+# ----------------------------------------------------------------------------------------------------
 # Run commands
+# ----------------------------------------------------------------------------------------------------
+
+# Disable warning
+requests.packages.urllib3.disable_warnings()
+
 cli.add_command(app_list)
-cli.add_command(approute_fields)
-cli.add_command(approute_device)
+cli.add_command(app_list_2)
+cli.add_command(qosmos_list)
+cli.add_command(app_list_json)
 
 if __name__ == "__main__":
     cli()
