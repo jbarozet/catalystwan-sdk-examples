@@ -1,7 +1,5 @@
 #! /usr/bin/env python3
 
-import time
-import cmd
 import json
 import logging
 import os
