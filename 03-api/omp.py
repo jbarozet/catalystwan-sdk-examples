@@ -1,5 +1,5 @@
 import sys
-import tabulate
+from tabulate import tabulate
 
 sys.path.insert(0, "..")
 from catalystwan.dataclasses import Personality
@@ -21,7 +21,7 @@ for item in edges:
     tr = [item.hostname, item.local_system_ip, item.is_reachable]
     table.append(tr)
 
-print(tabulate.tabulate(table, headers, tablefmt="fancy_grid"))
+print(tabulate(table, headers, tablefmt="fancy_grid"))
 
 
 # Get OMP peers
