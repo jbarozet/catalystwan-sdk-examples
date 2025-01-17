@@ -4,41 +4,71 @@
 # That will create a catalystwan.log file
 
 import sys
+import tabulate
+import click
 
-sys.path.insert(0, "..")
 from catalystwan.api.administration import User
 from catalystwan.session import ManagerSession
 
+sys.path.insert(0, "..")
 from utils.session import create_session
 
 
-# Get the list of users
-def list_users(session: ManagerSession):
-    users = session.api.users.get()
-
-    print("\n~~~ Users")
-    for user in users:
-        print(f" - {user.username} > group: {user.group} - resource-group:{user.resource_group}")
+@click.group()
+def cli():
+    """Command line tool to showcase Catalyst SD-WAN Python SDK"""
+    pass
 
 
-# Create a new user
-def create_user(session: ManagerSession):
-    new_user = User(username="test2", password="test!@#", group=["netadmin"], description="Test")
-    session.api.users.create(new_user)
+@click.command()
+def ls():
 
-
-# Delete a user
-def delete_user(session: ManagerSession):
-    session.api.users.delete(username="test2")
-
-
-def run_demo():
     with create_session() as session:
-        create_user(session)
-        # list_users(session)
-        # delete_user(session)
-        # list_users(session)
+
+        users = session.api.users.get()
+
+        table = list()
+        headers = ["Username", "Group"]
+
+        for user in users:
+            tr = [user.username, user.group, user.resource_group]
+            table.append(tr)
+
+        click.echo(tabulate.tabulate(table, headers, tablefmt="fancy_grid"))
+
+
+@click.command()
+def add():
+
+    username = input("\nEnter username to add: ")
+    password = "test!@#"
+    group = ["netadmin"]
+    description = "Test"
+
+    with create_session() as session:
+
+        new_user = User(
+            username=username, password=password, group=group, description=description
+        )
+        session.api.users.create(new_user)
+
+
+@click.command()
+def delete():
+
+    username = input("\nEnter username to add: ")
+
+    with create_session() as session:
+
+        session.api.users.delete(username=username)
 
 
 if __name__ == "__main__":
-    run_demo()
+
+    # Add commands
+    cli.add_command(ls)
+    cli.add_command(add)
+    cli.add_command(delete)
+
+    # Run commands
+    cli()
