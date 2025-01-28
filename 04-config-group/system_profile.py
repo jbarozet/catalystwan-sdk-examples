@@ -1,13 +1,17 @@
 import sys
-from typing import cast
-import urllib3
+from typing import List, Literal, Optional, Union, cast
 from uuid import UUID
+
+import urllib3
 
 sys.path.insert(0, "..")
 
 from catalystwan.api.configuration_groups.parcel import Global, as_global
-from catalystwan.models.configuration.feature_profile.sdwan.system import BFDParcel, OMPParcel
+from catalystwan.models.configuration.feature_profile.sdwan.system import BFDParcel, MRFParcel, OMPParcel
 from catalystwan.session import ManagerSession
+
+EnableMrfMigration = Literal["enabled", "enabled-from-bgp-core"]
+Role = Literal["edge-router", "border-router"]
 
 # Disable warnings because of no certificate on vManage
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -36,6 +40,7 @@ class SystemProfile:
         # Create parcels
         self.create_omp_parcel(profile_id)
         self.create_bfd_parcel(profile_id)
+        self.create_mrf_parcel(profile_id)
 
         return profile_id
 
@@ -71,8 +76,12 @@ class SystemProfile:
         print(f"- BFD parcel: {parcel_id}")
         return parcel_id
 
+    def create_mrf_parcel(self, profile_id: UUID) -> UUID:
+        """Create MRF parcel and attach it to the profile."""
 
-# Usage example:
-# session = ManagerSession(...)
-# profile_manager = SystemProfileManager(session)
-# profile_id = profile_manager.create_system_profile()
+        mrf = MRFParcel(parcel_name="SDK_MRF_Parcel")
+        mrf.role = Global[Role](value="edge-router")
+        # mrf.role = as_global("edge-router") # works but generate pydandic warning
+        parcel_id = self.system_api.create_parcel(profile_id, mrf).id
+        print(f"- MRF parcel: {parcel_id}")
+        return parcel_id
