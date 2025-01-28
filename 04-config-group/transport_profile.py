@@ -1,14 +1,12 @@
 import sys
-from typing import Literal, cast
+from ipaddress import IPv4Address
+from typing import Literal
+from uuid import UUID
 
-import click
 import urllib3
 
 sys.path.insert(0, "..")
-from ipaddress import IPv4Address
-from uuid import UUID
 
-# Default, Global, Variable, as_default, as_global, as_variable
 from catalystwan.api.configuration_groups.parcel import Global, as_global
 from catalystwan.models.common import SubnetMask
 from catalystwan.models.configuration.feature_profile.common import EncapType, StaticIPv4Address, StaticIPv4AddressConfig
@@ -20,84 +18,96 @@ from catalystwan.models.configuration.feature_profile.sdwan.transport.wan.interf
 )
 from catalystwan.session import ManagerSession
 
-# Disable warnings because of no certificate on vManage
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-# --- Delete Transport Profile -------------------------------------
-def delete_transport_profile(session: ManagerSession) -> bool:
-    profile_name = "SDK_TransportProfile"
-    existing_profile = session.api.sdwan_feature_profiles.transport.get_profiles().filter(profile_name=profile_name).single_or_default()
+class TransportProfile:
+    def __init__(self, session: ManagerSession):
+        self.session = session
+        self.profile_name = "SDK_TransportProfile"
+        self.profile_description = "Transport Profile from SDK"
+        self.transport_api = self.session.api.sdwan_feature_profiles.transport
 
-    if existing_profile is not None:
-        existing_profile_id = existing_profile.profile_id
-        print(f"- Existing Profile {profile_name} deleted: {existing_profile_id}")
-        session.api.sdwan_feature_profiles.transport.delete_profile(existing_profile_id)
-        return True
+    def create(self) -> UUID:
+        """Create a Transport Profile with required parcels."""
 
-    print(f"- Profile {profile_name} not found")
-    return False
+        print("\nCreating new Transport Profile")
 
+        # Check if profile exists and delete
+        self.delete()
 
-# --- Create Transport Profile ------------------------------------------------
-def create_transport_profile(session: ManagerSession) -> UUID:
-    """
-    This function creates a Transport Profile with required parcels
-    """
+        # Create new Transport Profile
+        profile_id = self.transport_api.create_profile(self.profile_name, self.profile_description).id
+        print(f"- New Transport Profile ID: {profile_id}")
 
-    profile_name = "SDK_TransportProfile"
-    profile_description = "Transport Profile from SDK"
+        # Create VPN and Interface parcels
+        vpn_parcel_id = self.create_vpn_parcel(profile_id)
+        self.create_interface_parcel(profile_id, vpn_parcel_id)
 
-    print(f"- Configuring Transport Profile: {profile_name}")
+        return profile_id
 
-    # Check if profile exists and delete
-    delete_transport_profile(session)
+    def delete(self) -> bool:
+        """Delete existing transport profile if it exists."""
+        existing_profile = self.transport_api.get_profiles().filter(profile_name=self.profile_name).single_or_default()
 
-    # --- Create new transport profile
-    profile_id = session.api.sdwan_feature_profiles.transport.create_profile(profile_name, profile_description).id
-    transport_api = session.api.sdwan_feature_profiles.transport
-    print(f"- Transport Profile ID: {profile_id}")
+        if existing_profile is not None:
+            existing_profile_id = existing_profile.profile_id
+            self.transport_api.delete_profile(existing_profile_id)
+            print(f"- Existing Profile {self.profile_name} deleted: {existing_profile_id}")
+            return True
 
-    # --- Create VPN Parcel
-    vpn = TransportVpnParcel(parcel_name="SDK_VPN0_Parcel")
-    # vpn.vpn_id = as_global(0) # this is a frozen parameter - always 0
+        print(f"- Profile {self.profile_name} not found")
+        return False
 
-    dns1 = as_global(IPv4Address("172.16.1.254"))
-    dns2 = as_global(IPv4Address("172.16.2.254"))
-    vpn.set_dns_ipv4(dns1, dns2)
+    def create_vpn_parcel(self, profile_id: UUID) -> UUID:
+        """Create VPN0 parcel and configure DNS and routes."""
+        vpn = TransportVpnParcel(parcel_name="SDK_VPN0_Parcel")
 
-    prefix = as_global(IPv4Address("0.0.0.0"))
-    mask = as_global("0.0.0.0", generic_alias=SubnetMask)
-    next_hops = [
-        (as_global(IPv4Address("172.16.1.254")), as_global(1)),
-        (as_global(IPv4Address("172.16.2.254")), as_global(8)),
-    ]
-    vpn.add_ipv4_route(prefix, mask, next_hops)
-    vpn_parcel_id = transport_api.create_parcel(profile_id, vpn).id
-    print(f"- VPN parcel: {vpn_parcel_id}")
+        # Configure DNS
+        dns1 = as_global(IPv4Address("172.16.1.254"))
+        dns2 = as_global(IPv4Address("172.16.2.254"))
+        vpn.set_dns_ipv4(dns1, dns2)
 
-    # Create VPN0 Transport Interfaces
-    interface_name = as_global("GigabitEthernet1")
-    encap_value = Global[Literal["ipsec", "gre"]](option_type="global", value="ipsec")
-    encapsulation = Encapsulation(encap=encap_value, preference=as_global(100), weight=as_global(1))
+        # Configure routes
+        prefix = as_global(IPv4Address("0.0.0.0"))
+        mask = as_global("0.0.0.0", generic_alias=SubnetMask)
+        next_hops = [
+            (as_global(IPv4Address("172.16.1.254")), as_global(1)),
+            (as_global(IPv4Address("172.16.2.254")), as_global(8)),
+        ]
+        vpn.add_ipv4_route(prefix, mask, next_hops)
 
-    interface_ip_address = InterfaceStaticIPv4Address(
-        static=StaticIPv4AddressConfig(
-            primary_ip_address=StaticIPv4Address(ip_address=as_global(IPv4Address("172.16.1.1")), subnet_mask=as_global("255.255.255.0"))
+        vpn_parcel_id = self.transport_api.create_parcel(profile_id, vpn).id
+        print(f"- VPN parcel: {vpn_parcel_id}")
+        return vpn_parcel_id
+
+    def create_interface_parcel(self, profile_id: UUID, vpn_parcel_id: UUID) -> UUID:
+        """Create VPN0 Transport Interface parcel."""
+        interface_name = as_global("GigabitEthernet1")
+
+        # Configure encapsulation
+        encap_value = Global[Literal["ipsec", "gre"]](option_type="global", value="ipsec")
+        preference = Global[int](value=100)
+        weight = Global[int](value=1)
+        encapsulation = Encapsulation(encap=encap_value, preference=preference, weight=weight)
+
+        # Configure interface IP
+        interface_ip_address = InterfaceStaticIPv4Address(
+            static=StaticIPv4AddressConfig(
+                primary_ip_address=StaticIPv4Address(ip_address=as_global(IPv4Address("172.16.1.1")), subnet_mask=as_global("255.255.255.0"))
+            )
         )
-    )
-    interface_description = as_global("mpls")
-    interface_shutdown = as_global(True)
-    interface_parcel = InterfaceEthernetParcel(
-        parcel_name="SDK_VPN0_Interface_mpls_Parcel",
-        encapsulation=[encapsulation],
-        interface_name=interface_name,
-        interface_ip_address=interface_ip_address,
-        interface_description=interface_description,
-        shutdown=interface_shutdown,
-    )
 
-    interface_parcel_id = session.api.sdwan_feature_profiles.transport.create_parcel(profile_id, interface_parcel, vpn_uuid=vpn_parcel_id).id
-    print(f"- VPN Interface parcel: {interface_parcel_id}")
+        # Create interface parcel
+        interface_parcel = InterfaceEthernetParcel(
+            parcel_name="SDK_VPN0_Interface_mpls_Parcel",
+            encapsulation=[encapsulation],
+            interface_name=interface_name,
+            interface_ip_address=interface_ip_address,
+            interface_description=as_global("mpls"),
+            shutdown=as_global(True),
+        )
 
-    return profile_id
+        interface_parcel_id = self.transport_api.create_parcel(profile_id, interface_parcel, vpn_uuid=vpn_parcel_id).id
+        print(f"- VPN Interface parcel: {interface_parcel_id}")
+        return interface_parcel_id
