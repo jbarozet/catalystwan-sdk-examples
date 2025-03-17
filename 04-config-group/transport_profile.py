@@ -5,11 +5,14 @@ from uuid import UUID
 
 import urllib3
 
+# from catalystwan.api.templates.models.cisco_vpn_interface_model import CoreRegion
+# from catalystwan.models.configuration.feature_profile.sdwan.transport.wan.interface.t1e1serial import MultiRegionFabric
+
 sys.path.insert(0, "..")
 
 from catalystwan.api.configuration_groups.parcel import Global, as_global
-from catalystwan.models.common import SubnetMask
-from catalystwan.models.configuration.feature_profile.common import EncapType, StaticIPv4Address, StaticIPv4AddressConfig
+from catalystwan.models.common import CoreRegion, SubnetMask
+from catalystwan.models.configuration.feature_profile.common import EncapType, MultiRegionFabric, StaticIPv4Address, StaticIPv4AddressConfig
 from catalystwan.models.configuration.feature_profile.sdwan.transport import TransportVpnParcel
 from catalystwan.models.configuration.feature_profile.sdwan.transport.wan.interface.ethernet import (
     Encapsulation,
@@ -106,7 +109,7 @@ class TransportProfile:
         # Define interface configurations
         interface_configs = [
             {
-                "parcel_name": "SDK_VPN0_Interface_mpls_Parcel",
+                "parcel_name": "SDK_VPN0_Interface_internet_Parcel",
                 "interface_name": "GigabitEthernet1",
                 "ip_address": "172.16.1.1",
                 "subnet_mask": "255.255.255.0",
@@ -123,9 +126,10 @@ class TransportProfile:
                     "hello_tolerance": 12,
                     "border": False,
                 },
+                "enable_core_region": True,
             },
             {
-                "parcel_name": "SDK_VPN0_Interface_internet_Parcel",
+                "parcel_name": "SDK_VPN0_Interface_mpls_Parcel",
                 "interface_name": "GigabitEthernet2",
                 "ip_address": "192.168.2.1",
                 "subnet_mask": "255.255.255.0",
@@ -136,12 +140,13 @@ class TransportProfile:
                 "shutdown": False,
                 "tunnel": True,
                 "tunnel_config": {
-                    "color": "biz-internet",
+                    "color": "mpls",
                     "max_control_connections": 2,
                     "hello_interval": 1000,
                     "hello_tolerance": 12,
                     "border": False,
                 },
+                "enable_core_region": False,
             },
         ]
 
@@ -175,6 +180,11 @@ class TransportProfile:
                 border=Global(value=config["tunnel_config"]["border"]),
             )
 
+            # Multi-Region Fabric - Enable interface to core
+            mrf = MultiRegionFabric()
+            # mrf.core_region = Global[CoreRegion](value="core")
+            mrf.enable_core_region = Global[bool](value=config["enable_core_region"])
+
             # Create interface parcel
             interface_parcel = InterfaceEthernetParcel(
                 parcel_name=config["parcel_name"],
@@ -185,6 +195,7 @@ class TransportProfile:
                 shutdown=shutdown,
                 tunnel_interface=tunnel_interface,
                 tunnel=tunnel,
+                multi_region_fabric=mrf,
             )
 
             interface_parcel_id = self.transport_api.create_parcel(profile_id, interface_parcel, vpn_uuid=vpn_parcel_id).id
