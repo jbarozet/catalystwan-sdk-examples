@@ -5,7 +5,7 @@
 API Call:
 - GET https://{{vmanage}}:{{port}}/dataservice/alarms/severitymappings
 
-[Response example](../examples/example_payload_alarms_mapping.json)
+[Response example](https://github.com/jbarozet/catalystwan-sdk-examples/example_payload_alarms_mapping.json)
 
 Gives a list of all alarms classified by category:
 - Critical
@@ -23,7 +23,7 @@ Each entry has multiple fields, including these 2 fields:
 API Call:
 - GET https://{{vmanage}}:{{port}}/dataservice/alarms/fields
 
-[Response example](../examples/example_payload_alarms_fields.json)
+[Response example](https://github.com/jbarozet/catalystwan-sdk-examples/example_payload_alarms_fields.json)
 
 
 ## Collecting alarms
@@ -31,7 +31,7 @@ API Call:
 - API call: POST dataservice/alarms (payload=query)
 - Bulk API call: GET dataservice/data/device/statistics/alarm?startDate={{startDate}}&endDate={{endDate}}&timeZone={{timeZone}}&count={{count}}
 
-[Response example](../examples/example_payload_alarms_bulk.json)
+[Response example](https://github.com/jbarozet/catalystwan-sdk-examples/example_payload_alarms_bulk.json)
 
 You can filter your queries using either of three provided fields:
 - rulename (ex: cpu-usage)
