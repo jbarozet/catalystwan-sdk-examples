@@ -27,6 +27,7 @@ def get_alarms():
     Get all alarms
     """
     alarms = session.api.alarms.get()
+    tt = session.api.users.
     print("~~~ ALARMS ~~~~~~~~~~~~~~~~~")
     for item in alarms:
         print_alarm(item)

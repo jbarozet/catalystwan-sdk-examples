@@ -1,0 +1,1713 @@
+{
+  "header": {
+    "generatedOn": 1742206706477
+  },
+  "data": [
+    {
+      "key": "Critical",
+      "value": "Critical",
+      "associatedAlarms": [
+        {
+          "key": "System_IP_Reuse",
+          "value": "System IP Reuse"
+        },
+        {
+          "key": "OMP_All_Vsmarts_Down",
+          "value": "OMP All Vsmarts Down"
+        },
+        {
+          "key": "Interface_Admin_State_Change",
+          "value": "Interface Admin State Change"
+        },
+        {
+          "key": "System-IP_Change",
+          "value": "System-IP Change"
+        },
+        {
+          "key": "Control_Node_Down",
+          "value": "Control Node Down"
+        },
+        {
+          "key": "Disk_Usage",
+          "value": "Disk Usage"
+        },
+        {
+          "key": "Control_All_Vsmarts_Down",
+          "value": "Control All Vsmarts Down"
+        },
+        {
+          "key": "Control_Vmanage_Down",
+          "value": "Control Vmanage Down"
+        },
+        {
+          "key": "Vmanage_Critical_Space_Usage",
+          "value": "Vmanage Critical Space Usage"
+        },
+        {
+          "key": "vEdge_Serial_File_Uploaded",
+          "value": "vEdge Serial File Uploaded"
+        },
+        {
+          "key": "UTD_File_Reputation_Retrospective_Alert",
+          "value": "UTD File Reputation Retrospective Alert"
+        },
+        {
+          "key": "UTD_Con",
+          "value": "UTD Con"
+        },
+        {
+          "key": "Device Upgrade Failed",
+          "value": "Device Upgrade Failed"
+        },
+        {
+          "key": "Root_Cert_Chain_Uninstalled",
+          "value": "Root Cert Chain Uninstalled"
+        },
+        {
+          "key": "UTD_Version_Mismatch",
+          "value": "UTD Version Mismatch"
+        },
+        {
+          "key": "OSPF_Router_Down",
+          "value": "OSPF Router Down"
+        },
+        {
+          "key": "Interface_State_Change",
+          "value": "Interface State Change"
+        },
+        {
+          "key": "aaa_Admin_Password_Change",
+          "value": "aaa Admin Password Change"
+        },
+        {
+          "key": "Device Activation Failed",
+          "value": "Device Activation Failed"
+        },
+        {
+          "key": "Org_Name_Change",
+          "value": "Org Name Change"
+        },
+        {
+          "key": "Control_Site_Down",
+          "value": "Control Site Down"
+        },
+        {
+          "key": "CPU_Usage",
+          "value": "CPU Usage"
+        },
+        {
+          "key": "UTD_File_Reputation_Alert",
+          "value": "UTD File Reputation Alert"
+        },
+        {
+          "key": "UTD_Notification",
+          "value": "UTD Notification"
+        },
+        {
+          "key": "Template_Rollback",
+          "value": "Template Rollback"
+        },
+        {
+          "key": "UTD_IPS_Alert",
+          "value": "UTD IPS Alert"
+        },
+        {
+          "key": "BFD_Node_Down",
+          "value": "BFD Node Down"
+        },
+        {
+          "key": "Root_Cert_Chain_Installed",
+          "value": "Root Cert Chain Installed"
+        },
+        {
+          "key": "Disk_Read_Speed",
+          "value": "Disk Read Speed"
+        },
+        {
+          "key": "OMP_Node_Down",
+          "value": "OMP Node Down"
+        },
+        {
+          "key": "System_License_Mismatch",
+          "value": "System License Mismatch"
+        },
+        {
+          "key": "Disaster_Recovery",
+          "value": "Disaster Recovery"
+        },
+        {
+          "key": "OMP_State_Change",
+          "value": "OMP State Change"
+        },
+        {
+          "key": "Site-ID_Change",
+          "value": "Site-ID Change"
+        },
+        {
+          "key": "Domain-ID_Change",
+          "value": "Domain-ID Change"
+        },
+        {
+          "key": "BGP_Router_Down",
+          "value": "BGP Router Down"
+        },
+        {
+          "key": "Control_Vsmart_Down",
+          "value": "Control Vsmart Down"
+        },
+        {
+          "key": "Memory_Usage",
+          "value": "Memory Usage"
+        },
+        {
+          "key": "Vmanage_Service_State",
+          "value": "Vmanage Service State"
+        },
+        {
+          "key": "Cloned_Vedge_Detected",
+          "value": "Cloned Vedge Detected"
+        },
+        {
+          "key": "vSmart/vManage_Serial_File_Uploaded",
+          "value": "vSmart/vManage Serial File Uploaded"
+        },
+        {
+          "key": "New_CSR_Generated",
+          "value": "New CSR Generated"
+        },
+        {
+          "key": "Vmanage_Node_Reachability_State",
+          "value": "Vmanage Node Reachability State"
+        },
+        {
+          "key": "OMP_Site_Down",
+          "value": "OMP Site Down"
+        },
+        {
+          "key": "Unsupported_SFP_Detected",
+          "value": "Unsupported SFP Detected"
+        },
+        {
+          "key": "Disk_Write_Speed",
+          "value": "Disk Write Speed"
+        },
+        {
+          "key": "System_Reboot_Issued",
+          "value": "System Reboot Issued"
+        },
+        {
+          "key": "Clear_Installed_Certificate",
+          "value": "Clear Installed Certificate"
+        },
+        {
+          "key": "GEO_Fence_Alert_Status",
+          "value": "GEO Fence Alert Status"
+        },
+        {
+          "key": "BFD_Between_Sites_Down",
+          "value": "BFD Between Sites Down"
+        },
+        {
+          "key": "ZTP Upgrade Failed",
+          "value": "ZTP Upgrade Failed"
+        },
+        {
+          "key": "APPQOE_ALARM",
+          "value": "APPQOE ALARM"
+        },
+        {
+          "key": "PxGrid_Connection_Notification",
+          "value": "PxGrid Connection Notification"
+        },
+        {
+          "key": "BFD_Site_Down",
+          "value": "BFD Site Down"
+        },
+        {
+          "key": "Control_vBond_State_Change",
+          "value": "Control vBond State Change"
+        },
+        {
+          "key": "Process_Restart",
+          "value": "Process Restart"
+        }
+      ]
+    },
+    {
+      "key": "Major",
+      "value": "Major",
+      "associatedAlarms": [
+        {
+          "key": "System_IP_Reuse",
+          "value": "System IP Reuse"
+        },
+        {
+          "key": "OMP_All_Vsmarts_Down",
+          "value": "OMP All Vsmarts Down"
+        },
+        {
+          "key": "Interface_Admin_State_Change",
+          "value": "Interface Admin State Change"
+        },
+        {
+          "key": "System-IP_Change",
+          "value": "System-IP Change"
+        },
+        {
+          "key": "DHCP_Server_State_Change",
+          "value": "DHCP Server State Change"
+        },
+        {
+          "key": "Control_Node_Down",
+          "value": "Control Node Down"
+        },
+        {
+          "key": "Disk_Usage",
+          "value": "Disk Usage"
+        },
+        {
+          "key": "Control_All_Vsmarts_Down",
+          "value": "Control All Vsmarts Down"
+        },
+        {
+          "key": "Control_Vmanage_Down",
+          "value": "Control Vmanage Down"
+        },
+        {
+          "key": "Vmanage_Critical_Space_Usage",
+          "value": "Vmanage Critical Space Usage"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_Off",
+          "value": "ZBFW Session Rate Alert Off"
+        },
+        {
+          "key": "vEdge_Serial_File_Uploaded",
+          "value": "vEdge Serial File Uploaded"
+        },
+        {
+          "key": "UTD_File_Reputation_Retrospective_Alert",
+          "value": "UTD File Reputation Retrospective Alert"
+        },
+        {
+          "key": "UTD_Con",
+          "value": "UTD Con"
+        },
+        {
+          "key": "Device Upgrade Failed",
+          "value": "Device Upgrade Failed"
+        },
+        {
+          "key": "Cisco Secure Access",
+          "value": "Cisco Secure Access"
+        },
+        {
+          "key": "UTD_Update",
+          "value": "UTD Update"
+        },
+        {
+          "key": "Root_Cert_Chain_Uninstalled",
+          "value": "Root Cert Chain Uninstalled"
+        },
+        {
+          "key": "UTD_Version_Mismatch",
+          "value": "UTD Version Mismatch"
+        },
+        {
+          "key": "OSPF_Router_Down",
+          "value": "OSPF Router Down"
+        },
+        {
+          "key": "Interface_State_Change",
+          "value": "Interface State Change"
+        },
+        {
+          "key": "aaa_Admin_Password_Change",
+          "value": "aaa Admin Password Change"
+        },
+        {
+          "key": "OSPF_Neighbor_State_Change",
+          "value": "OSPF Neighbor State Change"
+        },
+        {
+          "key": "Device Activation Failed",
+          "value": "Device Activation Failed"
+        },
+        {
+          "key": "Cloud On Ramp",
+          "value": "Cloud On Ramp"
+        },
+        {
+          "key": "Org_Name_Change",
+          "value": "Org Name Change"
+        },
+        {
+          "key": "SD-AVC Cloud Connector Error",
+          "value": "SD-AVC Cloud Connector Error"
+        },
+        {
+          "key": "Data_Policy_Commit_Failure",
+          "value": "Data Policy Commit Failure"
+        },
+        {
+          "key": "Control_Site_Down",
+          "value": "Control Site Down"
+        },
+        {
+          "key": "CPU_Usage",
+          "value": "CPU Usage"
+        },
+        {
+          "key": "UTD_File_Reputation_Alert",
+          "value": "UTD File Reputation Alert"
+        },
+        {
+          "key": "BFD_TLOC_Down",
+          "value": "BFD TLOC Down"
+        },
+        {
+          "key": "UTD_Notification",
+          "value": "UTD Notification"
+        },
+        {
+          "key": "Template_Rollback",
+          "value": "Template Rollback"
+        },
+        {
+          "key": "UTD_IPS_Alert",
+          "value": "UTD IPS Alert"
+        },
+        {
+          "key": "BFD_Node_Down",
+          "value": "BFD Node Down"
+        },
+        {
+          "key": "BGP_Peer_State_Change",
+          "value": "BGP Peer State Change"
+        },
+        {
+          "key": "Root_Cert_Chain_Installed",
+          "value": "Root Cert Chain Installed"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_On",
+          "value": "ZBFW Session Rate Alert On"
+        },
+        {
+          "key": "UTD_File_Reputation_Status_Event",
+          "value": "UTD File Reputation Status Event"
+        },
+        {
+          "key": "Disk_Read_Speed",
+          "value": "Disk Read Speed"
+        },
+        {
+          "key": "OMP_Node_Down",
+          "value": "OMP Node Down"
+        },
+        {
+          "key": "Pim_Interface_State_Change",
+          "value": "Pim Interface State Change"
+        },
+        {
+          "key": "ZBFW_Half_Open_Limit_Hit",
+          "value": "ZBFW Half Open Limit Hit"
+        },
+        {
+          "key": "System_License_Mismatch",
+          "value": "System License Mismatch"
+        },
+        {
+          "key": "Disaster_Recovery",
+          "value": "Disaster Recovery"
+        },
+        {
+          "key": "OMP_State_Change",
+          "value": "OMP State Change"
+        },
+        {
+          "key": "Site-ID_Change",
+          "value": "Site-ID Change"
+        },
+        {
+          "key": "UTD_File_Analysis_Status_Event",
+          "value": "UTD File Analysis Status Event"
+        },
+        {
+          "key": "Tracker_State_Change",
+          "value": "Tracker State Change"
+        },
+        {
+          "key": "Domain-ID_Change",
+          "value": "Domain-ID Change"
+        },
+        {
+          "key": "BGP_Router_Down",
+          "value": "BGP Router Down"
+        },
+        {
+          "key": "Control_Vsmart_Down",
+          "value": "Control Vsmart Down"
+        },
+        {
+          "key": "Memory_Usage",
+          "value": "Memory Usage"
+        },
+        {
+          "key": "SLA_change",
+          "value": "SLA change"
+        },
+        {
+          "key": "Vmanage_Service_State",
+          "value": "Vmanage Service State"
+        },
+        {
+          "key": "Cloned_Vedge_Detected",
+          "value": "Cloned Vedge Detected"
+        },
+        {
+          "key": "vSmart/vManage_Serial_File_Uploaded",
+          "value": "vSmart/vManage Serial File Uploaded"
+        },
+        {
+          "key": "vManage_Queue_State",
+          "value": "vManage Queue State"
+        },
+        {
+          "key": "New_CSR_Generated",
+          "value": "New CSR Generated"
+        },
+        {
+          "key": "Vmanage_Node_Reachability_State",
+          "value": "Vmanage Node Reachability State"
+        },
+        {
+          "key": "Default App List Update",
+          "value": "Default App List Update"
+        },
+        {
+          "key": "OMP_Site_Down",
+          "value": "OMP Site Down"
+        },
+        {
+          "key": "Unsupported_SFP_Detected",
+          "value": "Unsupported SFP Detected"
+        },
+        {
+          "key": "Disk_Write_Speed",
+          "value": "Disk Write Speed"
+        },
+        {
+          "key": "System_Reboot_Issued",
+          "value": "System Reboot Issued"
+        },
+        {
+          "key": "Clear_Installed_Certificate",
+          "value": "Clear Installed Certificate"
+        },
+        {
+          "key": "UTD_File_Analysis_Upload_Status",
+          "value": "UTD File Analysis Upload Status"
+        },
+        {
+          "key": "GEO_Fence_Alert_Status",
+          "value": "GEO Fence Alert Status"
+        },
+        {
+          "key": "BFD_Between_Sites_Down",
+          "value": "BFD Between Sites Down"
+        },
+        {
+          "key": "ZTP Upgrade Failed",
+          "value": "ZTP Upgrade Failed"
+        },
+        {
+          "key": "Control_TLOC_Down",
+          "value": "Control TLOC Down"
+        },
+        {
+          "key": "APPQOE_ALARM",
+          "value": "APPQOE ALARM"
+        },
+        {
+          "key": "PxGrid_Connection_Notification",
+          "value": "PxGrid Connection Notification"
+        },
+        {
+          "key": "BFD_Site_Down",
+          "value": "BFD Site Down"
+        },
+        {
+          "key": "Control_vBond_State_Change",
+          "value": "Control vBond State Change"
+        },
+        {
+          "key": "Process_Restart",
+          "value": "Process Restart"
+        },
+        {
+          "key": "ZBFW_Session_Maximum",
+          "value": "ZBFW Session Maximum"
+        }
+      ]
+    },
+    {
+      "key": "Medium",
+      "value": "Medium",
+      "associatedAlarms": [
+        {
+          "key": "Control_Vsmart_Up",
+          "value": "Control Vsmart Up"
+        },
+        {
+          "key": "System_IP_Reuse",
+          "value": "System IP Reuse"
+        },
+        {
+          "key": "OMP_Vsmarts_Up",
+          "value": "OMP Vsmarts Up"
+        },
+        {
+          "key": "OMP_All_Vsmarts_Down",
+          "value": "OMP All Vsmarts Down"
+        },
+        {
+          "key": "Interface_Admin_State_Change",
+          "value": "Interface Admin State Change"
+        },
+        {
+          "key": "Control_Vsmarts_Up",
+          "value": "Control Vsmarts Up"
+        },
+        {
+          "key": "OMP_Site_Up",
+          "value": "OMP Site Up"
+        },
+        {
+          "key": "System-IP_Change",
+          "value": "System-IP Change"
+        },
+        {
+          "key": "DHCP_Server_State_Change",
+          "value": "DHCP Server State Change"
+        },
+        {
+          "key": "Control_Node_Down",
+          "value": "Control Node Down"
+        },
+        {
+          "key": "Disk_Usage",
+          "value": "Disk Usage"
+        },
+        {
+          "key": "Control_All_Vsmarts_Down",
+          "value": "Control All Vsmarts Down"
+        },
+        {
+          "key": "Control_Vmanage_Down",
+          "value": "Control Vmanage Down"
+        },
+        {
+          "key": "Vmanage_Critical_Space_Usage",
+          "value": "Vmanage Critical Space Usage"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_Off",
+          "value": "ZBFW Session Rate Alert Off"
+        },
+        {
+          "key": "vEdge_Serial_File_Uploaded",
+          "value": "vEdge Serial File Uploaded"
+        },
+        {
+          "key": "UTD_File_Reputation_Retrospective_Alert",
+          "value": "UTD File Reputation Retrospective Alert"
+        },
+        {
+          "key": "UTD_Con",
+          "value": "UTD Con"
+        },
+        {
+          "key": "OSPF_Router_Up",
+          "value": "OSPF Router Up"
+        },
+        {
+          "key": "Device Upgrade Failed",
+          "value": "Device Upgrade Failed"
+        },
+        {
+          "key": "Cisco Secure Access",
+          "value": "Cisco Secure Access"
+        },
+        {
+          "key": "UTD_Update",
+          "value": "UTD Update"
+        },
+        {
+          "key": "Root_Cert_Chain_Uninstalled",
+          "value": "Root Cert Chain Uninstalled"
+        },
+        {
+          "key": "UTD_Version_Mismatch",
+          "value": "UTD Version Mismatch"
+        },
+        {
+          "key": "OSPF_Router_Down",
+          "value": "OSPF Router Down"
+        },
+        {
+          "key": "Interface_State_Change",
+          "value": "Interface State Change"
+        },
+        {
+          "key": "aaa_Admin_Password_Change",
+          "value": "aaa Admin Password Change"
+        },
+        {
+          "key": "OSPF_Neighbor_State_Change",
+          "value": "OSPF Neighbor State Change"
+        },
+        {
+          "key": "Device Activation Failed",
+          "value": "Device Activation Failed"
+        },
+        {
+          "key": "Cloud On Ramp",
+          "value": "Cloud On Ramp"
+        },
+        {
+          "key": "Org_Name_Change",
+          "value": "Org Name Change"
+        },
+        {
+          "key": "SD-AVC Cloud Connector Error",
+          "value": "SD-AVC Cloud Connector Error"
+        },
+        {
+          "key": "Data_Policy_Commit_Failure",
+          "value": "Data Policy Commit Failure"
+        },
+        {
+          "key": "BFD_Node_Up",
+          "value": "BFD Node Up"
+        },
+        {
+          "key": "Control_Site_Down",
+          "value": "Control Site Down"
+        },
+        {
+          "key": "CPU_Usage",
+          "value": "CPU Usage"
+        },
+        {
+          "key": "BFD_TLOC_Up",
+          "value": "BFD TLOC Up"
+        },
+        {
+          "key": "UTD_File_Reputation_Alert",
+          "value": "UTD File Reputation Alert"
+        },
+        {
+          "key": "BFD_TLOC_Down",
+          "value": "BFD TLOC Down"
+        },
+        {
+          "key": "OMP_Node_Up",
+          "value": "OMP Node Up"
+        },
+        {
+          "key": "Control_Node_Up",
+          "value": "Control Node Up"
+        },
+        {
+          "key": "UTD_Notification",
+          "value": "UTD Notification"
+        },
+        {
+          "key": "Control_TLOC_Up",
+          "value": "Control TLOC Up"
+        },
+        {
+          "key": "Template_Rollback",
+          "value": "Template Rollback"
+        },
+        {
+          "key": "UTD_IPS_Alert",
+          "value": "UTD IPS Alert"
+        },
+        {
+          "key": "BFD_Node_Down",
+          "value": "BFD Node Down"
+        },
+        {
+          "key": "BGP_Peer_State_Change",
+          "value": "BGP Peer State Change"
+        },
+        {
+          "key": "Root_Cert_Chain_Installed",
+          "value": "Root Cert Chain Installed"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_On",
+          "value": "ZBFW Session Rate Alert On"
+        },
+        {
+          "key": "UTD_File_Reputation_Status_Event",
+          "value": "UTD File Reputation Status Event"
+        },
+        {
+          "key": "Disk_Read_Speed",
+          "value": "Disk Read Speed"
+        },
+        {
+          "key": "Control_Vmanage_Up",
+          "value": "Control Vmanage Up"
+        },
+        {
+          "key": "OMP_Node_Down",
+          "value": "OMP Node Down"
+        },
+        {
+          "key": "Pim_Interface_State_Change",
+          "value": "Pim Interface State Change"
+        },
+        {
+          "key": "ZBFW_Half_Open_Limit_Hit",
+          "value": "ZBFW Half Open Limit Hit"
+        },
+        {
+          "key": "System_License_Mismatch",
+          "value": "System License Mismatch"
+        },
+        {
+          "key": "Disaster_Recovery",
+          "value": "Disaster Recovery"
+        },
+        {
+          "key": "OMP_State_Change",
+          "value": "OMP State Change"
+        },
+        {
+          "key": "Site-ID_Change",
+          "value": "Site-ID Change"
+        },
+        {
+          "key": "UTD_File_Analysis_Status_Event",
+          "value": "UTD File Analysis Status Event"
+        },
+        {
+          "key": "Tracker_State_Change",
+          "value": "Tracker State Change"
+        },
+        {
+          "key": "Domain-ID_Change",
+          "value": "Domain-ID Change"
+        },
+        {
+          "key": "BGP_Router_Down",
+          "value": "BGP Router Down"
+        },
+        {
+          "key": "Control_Vsmart_Down",
+          "value": "Control Vsmart Down"
+        },
+        {
+          "key": "Memory_Usage",
+          "value": "Memory Usage"
+        },
+        {
+          "key": "SLA_change",
+          "value": "SLA change"
+        },
+        {
+          "key": "Vmanage_Service_State",
+          "value": "Vmanage Service State"
+        },
+        {
+          "key": "Cloned_Vedge_Detected",
+          "value": "Cloned Vedge Detected"
+        },
+        {
+          "key": "BFD_Between_Sites_Up",
+          "value": "BFD Between Sites Up"
+        },
+        {
+          "key": "vSmart/vManage_Serial_File_Uploaded",
+          "value": "vSmart/vManage Serial File Uploaded"
+        },
+        {
+          "key": "vManage_Queue_State",
+          "value": "vManage Queue State"
+        },
+        {
+          "key": "New_CSR_Generated",
+          "value": "New CSR Generated"
+        },
+        {
+          "key": "Vmanage_Node_Reachability_State",
+          "value": "Vmanage Node Reachability State"
+        },
+        {
+          "key": "Default App List Update",
+          "value": "Default App List Update"
+        },
+        {
+          "key": "OMP_Site_Down",
+          "value": "OMP Site Down"
+        },
+        {
+          "key": "Unsupported_SFP_Detected",
+          "value": "Unsupported SFP Detected"
+        },
+        {
+          "key": "Disk_Write_Speed",
+          "value": "Disk Write Speed"
+        },
+        {
+          "key": "System_Reboot_Issued",
+          "value": "System Reboot Issued"
+        },
+        {
+          "key": "Clear_Installed_Certificate",
+          "value": "Clear Installed Certificate"
+        },
+        {
+          "key": "UTD_File_Analysis_Upload_Status",
+          "value": "UTD File Analysis Upload Status"
+        },
+        {
+          "key": "GEO_Fence_Alert_Status",
+          "value": "GEO Fence Alert Status"
+        },
+        {
+          "key": "BFD_Between_Sites_Down",
+          "value": "BFD Between Sites Down"
+        },
+        {
+          "key": "ZTP Upgrade Failed",
+          "value": "ZTP Upgrade Failed"
+        },
+        {
+          "key": "Control_TLOC_Down",
+          "value": "Control TLOC Down"
+        },
+        {
+          "key": "APPQOE_ALARM",
+          "value": "APPQOE ALARM"
+        },
+        {
+          "key": "PxGrid_Connection_Notification",
+          "value": "PxGrid Connection Notification"
+        },
+        {
+          "key": "Control_Site_Up",
+          "value": "Control Site Up"
+        },
+        {
+          "key": "BFD_Site_Down",
+          "value": "BFD Site Down"
+        },
+        {
+          "key": "BFD_Site_Up",
+          "value": "BFD Site Up"
+        },
+        {
+          "key": "Control_vBond_State_Change",
+          "value": "Control vBond State Change"
+        },
+        {
+          "key": "BGP_Router_Up",
+          "value": "BGP Router Up"
+        },
+        {
+          "key": "Process_Restart",
+          "value": "Process Restart"
+        },
+        {
+          "key": "ZBFW_Session_Maximum",
+          "value": "ZBFW Session Maximum"
+        }
+      ]
+    },
+    {
+      "key": "Minor",
+      "value": "Minor",
+      "associatedAlarms": [
+        {
+          "key": "Control_Vsmart_Up",
+          "value": "Control Vsmart Up"
+        },
+        {
+          "key": "SLA_Violation",
+          "value": "SLA Violation"
+        },
+        {
+          "key": "System_IP_Reuse",
+          "value": "System IP Reuse"
+        },
+        {
+          "key": "OMP_Vsmarts_Up",
+          "value": "OMP Vsmarts Up"
+        },
+        {
+          "key": "OMP_All_Vsmarts_Down",
+          "value": "OMP All Vsmarts Down"
+        },
+        {
+          "key": "Interface_Admin_State_Change",
+          "value": "Interface Admin State Change"
+        },
+        {
+          "key": "Control_Vsmarts_Up",
+          "value": "Control Vsmarts Up"
+        },
+        {
+          "key": "OMP_Site_Up",
+          "value": "OMP Site Up"
+        },
+        {
+          "key": "System-IP_Change",
+          "value": "System-IP Change"
+        },
+        {
+          "key": "DHCP_Server_State_Change",
+          "value": "DHCP Server State Change"
+        },
+        {
+          "key": "Control_Node_Down",
+          "value": "Control Node Down"
+        },
+        {
+          "key": "Disk_Usage",
+          "value": "Disk Usage"
+        },
+        {
+          "key": "Control_All_Vsmarts_Down",
+          "value": "Control All Vsmarts Down"
+        },
+        {
+          "key": "Control_Vmanage_Down",
+          "value": "Control Vmanage Down"
+        },
+        {
+          "key": "Vmanage_Critical_Space_Usage",
+          "value": "Vmanage Critical Space Usage"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_Off",
+          "value": "ZBFW Session Rate Alert Off"
+        },
+        {
+          "key": "vEdge_Serial_File_Uploaded",
+          "value": "vEdge Serial File Uploaded"
+        },
+        {
+          "key": "UTD_File_Reputation_Retrospective_Alert",
+          "value": "UTD File Reputation Retrospective Alert"
+        },
+        {
+          "key": "UTD_Con",
+          "value": "UTD Con"
+        },
+        {
+          "key": "OSPF_Router_Up",
+          "value": "OSPF Router Up"
+        },
+        {
+          "key": "Device Upgrade Failed",
+          "value": "Device Upgrade Failed"
+        },
+        {
+          "key": "Cisco Secure Access",
+          "value": "Cisco Secure Access"
+        },
+        {
+          "key": "UTD_Update",
+          "value": "UTD Update"
+        },
+        {
+          "key": "Root_Cert_Chain_Uninstalled",
+          "value": "Root Cert Chain Uninstalled"
+        },
+        {
+          "key": "UTD_Version_Mismatch",
+          "value": "UTD Version Mismatch"
+        },
+        {
+          "key": "OSPF_Router_Down",
+          "value": "OSPF Router Down"
+        },
+        {
+          "key": "Interface_State_Change",
+          "value": "Interface State Change"
+        },
+        {
+          "key": "aaa_Admin_Password_Change",
+          "value": "aaa Admin Password Change"
+        },
+        {
+          "key": "OSPF_Neighbor_State_Change",
+          "value": "OSPF Neighbor State Change"
+        },
+        {
+          "key": "Device Activation Failed",
+          "value": "Device Activation Failed"
+        },
+        {
+          "key": "Cloud On Ramp",
+          "value": "Cloud On Ramp"
+        },
+        {
+          "key": "Org_Name_Change",
+          "value": "Org Name Change"
+        },
+        {
+          "key": "SD-AVC Cloud Connector Error",
+          "value": "SD-AVC Cloud Connector Error"
+        },
+        {
+          "key": "Data_Policy_Commit_Failure",
+          "value": "Data Policy Commit Failure"
+        },
+        {
+          "key": "BFD_Node_Up",
+          "value": "BFD Node Up"
+        },
+        {
+          "key": "Control_Site_Down",
+          "value": "Control Site Down"
+        },
+        {
+          "key": "CPU_Usage",
+          "value": "CPU Usage"
+        },
+        {
+          "key": "BFD_TLOC_Up",
+          "value": "BFD TLOC Up"
+        },
+        {
+          "key": "UTD_File_Reputation_Alert",
+          "value": "UTD File Reputation Alert"
+        },
+        {
+          "key": "BFD_TLOC_Down",
+          "value": "BFD TLOC Down"
+        },
+        {
+          "key": "Pseudo_Commit_Status",
+          "value": "Pseudo Commit Status"
+        },
+        {
+          "key": "OMP_Node_Up",
+          "value": "OMP Node Up"
+        },
+        {
+          "key": "Control_Node_Up",
+          "value": "Control Node Up"
+        },
+        {
+          "key": "UTD_Notification",
+          "value": "UTD Notification"
+        },
+        {
+          "key": "Control_TLOC_Up",
+          "value": "Control TLOC Up"
+        },
+        {
+          "key": "Template_Rollback",
+          "value": "Template Rollback"
+        },
+        {
+          "key": "UTD_IPS_Alert",
+          "value": "UTD IPS Alert"
+        },
+        {
+          "key": "BFD_Node_Down",
+          "value": "BFD Node Down"
+        },
+        {
+          "key": "BGP_Peer_State_Change",
+          "value": "BGP Peer State Change"
+        },
+        {
+          "key": "Root_Cert_Chain_Installed",
+          "value": "Root Cert Chain Installed"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_On",
+          "value": "ZBFW Session Rate Alert On"
+        },
+        {
+          "key": "UTD_File_Reputation_Status_Event",
+          "value": "UTD File Reputation Status Event"
+        },
+        {
+          "key": "Disk_Read_Speed",
+          "value": "Disk Read Speed"
+        },
+        {
+          "key": "Control_Vmanage_Up",
+          "value": "Control Vmanage Up"
+        },
+        {
+          "key": "OMP_Node_Down",
+          "value": "OMP Node Down"
+        },
+        {
+          "key": "Pim_Interface_State_Change",
+          "value": "Pim Interface State Change"
+        },
+        {
+          "key": "ZBFW_Half_Open_Limit_Hit",
+          "value": "ZBFW Half Open Limit Hit"
+        },
+        {
+          "key": "System_License_Mismatch",
+          "value": "System License Mismatch"
+        },
+        {
+          "key": "Disaster_Recovery",
+          "value": "Disaster Recovery"
+        },
+        {
+          "key": "OMP_State_Change",
+          "value": "OMP State Change"
+        },
+        {
+          "key": "Site-ID_Change",
+          "value": "Site-ID Change"
+        },
+        {
+          "key": "UTD_File_Analysis_Status_Event",
+          "value": "UTD File Analysis Status Event"
+        },
+        {
+          "key": "Tracker_State_Change",
+          "value": "Tracker State Change"
+        },
+        {
+          "key": "Domain-ID_Change",
+          "value": "Domain-ID Change"
+        },
+        {
+          "key": "BGP_Router_Down",
+          "value": "BGP Router Down"
+        },
+        {
+          "key": "Control_Vsmart_Down",
+          "value": "Control Vsmart Down"
+        },
+        {
+          "key": "Memory_Usage",
+          "value": "Memory Usage"
+        },
+        {
+          "key": "SLA_change",
+          "value": "SLA change"
+        },
+        {
+          "key": "Vmanage_Service_State",
+          "value": "Vmanage Service State"
+        },
+        {
+          "key": "Cloned_Vedge_Detected",
+          "value": "Cloned Vedge Detected"
+        },
+        {
+          "key": "BFD_Between_Sites_Up",
+          "value": "BFD Between Sites Up"
+        },
+        {
+          "key": "vSmart/vManage_Serial_File_Uploaded",
+          "value": "vSmart/vManage Serial File Uploaded"
+        },
+        {
+          "key": "vManage_Queue_State",
+          "value": "vManage Queue State"
+        },
+        {
+          "key": "New_CSR_Generated",
+          "value": "New CSR Generated"
+        },
+        {
+          "key": "Vmanage_Node_Reachability_State",
+          "value": "Vmanage Node Reachability State"
+        },
+        {
+          "key": "Default App List Update",
+          "value": "Default App List Update"
+        },
+        {
+          "key": "OMP_Site_Down",
+          "value": "OMP Site Down"
+        },
+        {
+          "key": "Unsupported_SFP_Detected",
+          "value": "Unsupported SFP Detected"
+        },
+        {
+          "key": "Disk_Write_Speed",
+          "value": "Disk Write Speed"
+        },
+        {
+          "key": "System_Reboot_Issued",
+          "value": "System Reboot Issued"
+        },
+        {
+          "key": "Clear_Installed_Certificate",
+          "value": "Clear Installed Certificate"
+        },
+        {
+          "key": "UTD_File_Analysis_Upload_Status",
+          "value": "UTD File Analysis Upload Status"
+        },
+        {
+          "key": "GEO_Fence_Alert_Status",
+          "value": "GEO Fence Alert Status"
+        },
+        {
+          "key": "BFD_Between_Sites_Down",
+          "value": "BFD Between Sites Down"
+        },
+        {
+          "key": "ZTP Upgrade Failed",
+          "value": "ZTP Upgrade Failed"
+        },
+        {
+          "key": "Control_TLOC_Down",
+          "value": "Control TLOC Down"
+        },
+        {
+          "key": "APPQOE_ALARM",
+          "value": "APPQOE ALARM"
+        },
+        {
+          "key": "PxGrid_Connection_Notification",
+          "value": "PxGrid Connection Notification"
+        },
+        {
+          "key": "Control_Site_Up",
+          "value": "Control Site Up"
+        },
+        {
+          "key": "SLA_Violation_Packet_Drop",
+          "value": "SLA Violation Packet Drop"
+        },
+        {
+          "key": "BFD_Site_Down",
+          "value": "BFD Site Down"
+        },
+        {
+          "key": "BFD_Site_Up",
+          "value": "BFD Site Up"
+        },
+        {
+          "key": "Control_vBond_State_Change",
+          "value": "Control vBond State Change"
+        },
+        {
+          "key": "BGP_Router_Up",
+          "value": "BGP Router Up"
+        },
+        {
+          "key": "Process_Restart",
+          "value": "Process Restart"
+        },
+        {
+          "key": "ZBFW_Session_Maximum",
+          "value": "ZBFW Session Maximum"
+        }
+      ]
+    },
+    {
+      "key": "Info",
+      "value": "Info",
+      "associatedAlarms": [
+        {
+          "key": "Control_Vsmart_Up",
+          "value": "Control Vsmart Up"
+        },
+        {
+          "key": "SLA_Violation",
+          "value": "SLA Violation"
+        },
+        {
+          "key": "System_IP_Reuse",
+          "value": "System IP Reuse"
+        },
+        {
+          "key": "OMP_Vsmarts_Up",
+          "value": "OMP Vsmarts Up"
+        },
+        {
+          "key": "OMP_All_Vsmarts_Down",
+          "value": "OMP All Vsmarts Down"
+        },
+        {
+          "key": "Interface_Admin_State_Change",
+          "value": "Interface Admin State Change"
+        },
+        {
+          "key": "Control_Vsmarts_Up",
+          "value": "Control Vsmarts Up"
+        },
+        {
+          "key": "OMP_Site_Up",
+          "value": "OMP Site Up"
+        },
+        {
+          "key": "System-IP_Change",
+          "value": "System-IP Change"
+        },
+        {
+          "key": "DHCP_Server_State_Change",
+          "value": "DHCP Server State Change"
+        },
+        {
+          "key": "Control_Node_Down",
+          "value": "Control Node Down"
+        },
+        {
+          "key": "Disk_Usage",
+          "value": "Disk Usage"
+        },
+        {
+          "key": "Control_All_Vsmarts_Down",
+          "value": "Control All Vsmarts Down"
+        },
+        {
+          "key": "Control_Vmanage_Down",
+          "value": "Control Vmanage Down"
+        },
+        {
+          "key": "Vmanage_Critical_Space_Usage",
+          "value": "Vmanage Critical Space Usage"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_Off",
+          "value": "ZBFW Session Rate Alert Off"
+        },
+        {
+          "key": "vEdge_Serial_File_Uploaded",
+          "value": "vEdge Serial File Uploaded"
+        },
+        {
+          "key": "UTD_File_Reputation_Retrospective_Alert",
+          "value": "UTD File Reputation Retrospective Alert"
+        },
+        {
+          "key": "UTD_Con",
+          "value": "UTD Con"
+        },
+        {
+          "key": "OSPF_Router_Up",
+          "value": "OSPF Router Up"
+        },
+        {
+          "key": "Device Upgrade Failed",
+          "value": "Device Upgrade Failed"
+        },
+        {
+          "key": "Cisco Secure Access",
+          "value": "Cisco Secure Access"
+        },
+        {
+          "key": "UTD_Update",
+          "value": "UTD Update"
+        },
+        {
+          "key": "Root_Cert_Chain_Uninstalled",
+          "value": "Root Cert Chain Uninstalled"
+        },
+        {
+          "key": "UTD_Version_Mismatch",
+          "value": "UTD Version Mismatch"
+        },
+        {
+          "key": "OSPF_Router_Down",
+          "value": "OSPF Router Down"
+        },
+        {
+          "key": "Interface_State_Change",
+          "value": "Interface State Change"
+        },
+        {
+          "key": "aaa_Admin_Password_Change",
+          "value": "aaa Admin Password Change"
+        },
+        {
+          "key": "OSPF_Neighbor_State_Change",
+          "value": "OSPF Neighbor State Change"
+        },
+        {
+          "key": "Device Activation Failed",
+          "value": "Device Activation Failed"
+        },
+        {
+          "key": "Cloud On Ramp",
+          "value": "Cloud On Ramp"
+        },
+        {
+          "key": "Org_Name_Change",
+          "value": "Org Name Change"
+        },
+        {
+          "key": "SD-AVC Cloud Connector Error",
+          "value": "SD-AVC Cloud Connector Error"
+        },
+        {
+          "key": "Data_Policy_Commit_Failure",
+          "value": "Data Policy Commit Failure"
+        },
+        {
+          "key": "BFD_Node_Up",
+          "value": "BFD Node Up"
+        },
+        {
+          "key": "Control_Site_Down",
+          "value": "Control Site Down"
+        },
+        {
+          "key": "CPU_Usage",
+          "value": "CPU Usage"
+        },
+        {
+          "key": "BFD_TLOC_Up",
+          "value": "BFD TLOC Up"
+        },
+        {
+          "key": "UTD_File_Reputation_Alert",
+          "value": "UTD File Reputation Alert"
+        },
+        {
+          "key": "BFD_TLOC_Down",
+          "value": "BFD TLOC Down"
+        },
+        {
+          "key": "Pseudo_Commit_Status",
+          "value": "Pseudo Commit Status"
+        },
+        {
+          "key": "OMP_Node_Up",
+          "value": "OMP Node Up"
+        },
+        {
+          "key": "Control_Node_Up",
+          "value": "Control Node Up"
+        },
+        {
+          "key": "UTD_Notification",
+          "value": "UTD Notification"
+        },
+        {
+          "key": "Control_TLOC_Up",
+          "value": "Control TLOC Up"
+        },
+        {
+          "key": "Template_Rollback",
+          "value": "Template Rollback"
+        },
+        {
+          "key": "UTD_IPS_Alert",
+          "value": "UTD IPS Alert"
+        },
+        {
+          "key": "BFD_Node_Down",
+          "value": "BFD Node Down"
+        },
+        {
+          "key": "BGP_Peer_State_Change",
+          "value": "BGP Peer State Change"
+        },
+        {
+          "key": "Root_Cert_Chain_Installed",
+          "value": "Root Cert Chain Installed"
+        },
+        {
+          "key": "ZBFW_Session_Rate_Alert_On",
+          "value": "ZBFW Session Rate Alert On"
+        },
+        {
+          "key": "UTD_File_Reputation_Status_Event",
+          "value": "UTD File Reputation Status Event"
+        },
+        {
+          "key": "Disk_Read_Speed",
+          "value": "Disk Read Speed"
+        },
+        {
+          "key": "Control_Vmanage_Up",
+          "value": "Control Vmanage Up"
+        },
+        {
+          "key": "OMP_Node_Down",
+          "value": "OMP Node Down"
+        },
+        {
+          "key": "Pim_Interface_State_Change",
+          "value": "Pim Interface State Change"
+        },
+        {
+          "key": "ZBFW_Half_Open_Limit_Hit",
+          "value": "ZBFW Half Open Limit Hit"
+        },
+        {
+          "key": "System_License_Mismatch",
+          "value": "System License Mismatch"
+        },
+        {
+          "key": "Disaster_Recovery",
+          "value": "Disaster Recovery"
+        },
+        {
+          "key": "OMP_State_Change",
+          "value": "OMP State Change"
+        },
+        {
+          "key": "Site-ID_Change",
+          "value": "Site-ID Change"
+        },
+        {
+          "key": "UTD_File_Analysis_Status_Event",
+          "value": "UTD File Analysis Status Event"
+        },
+        {
+          "key": "Tracker_State_Change",
+          "value": "Tracker State Change"
+        },
+        {
+          "key": "Domain-ID_Change",
+          "value": "Domain-ID Change"
+        },
+        {
+          "key": "BGP_Router_Down",
+          "value": "BGP Router Down"
+        },
+        {
+          "key": "Control_Vsmart_Down",
+          "value": "Control Vsmart Down"
+        },
+        {
+          "key": "Memory_Usage",
+          "value": "Memory Usage"
+        },
+        {
+          "key": "SLA_change",
+          "value": "SLA change"
+        },
+        {
+          "key": "Vmanage_Service_State",
+          "value": "Vmanage Service State"
+        },
+        {
+          "key": "Cloned_Vedge_Detected",
+          "value": "Cloned Vedge Detected"
+        },
+        {
+          "key": "BFD_Between_Sites_Up",
+          "value": "BFD Between Sites Up"
+        },
+        {
+          "key": "vSmart/vManage_Serial_File_Uploaded",
+          "value": "vSmart/vManage Serial File Uploaded"
+        },
+        {
+          "key": "vManage_Queue_State",
+          "value": "vManage Queue State"
+        },
+        {
+          "key": "New_CSR_Generated",
+          "value": "New CSR Generated"
+        },
+        {
+          "key": "Vmanage_Node_Reachability_State",
+          "value": "Vmanage Node Reachability State"
+        },
+        {
+          "key": "Default App List Update",
+          "value": "Default App List Update"
+        },
+        {
+          "key": "OMP_Site_Down",
+          "value": "OMP Site Down"
+        },
+        {
+          "key": "Unsupported_SFP_Detected",
+          "value": "Unsupported SFP Detected"
+        },
+        {
+          "key": "Disk_Write_Speed",
+          "value": "Disk Write Speed"
+        },
+        {
+          "key": "System_Reboot_Issued",
+          "value": "System Reboot Issued"
+        },
+        {
+          "key": "Clear_Installed_Certificate",
+          "value": "Clear Installed Certificate"
+        },
+        {
+          "key": "UTD_File_Analysis_Upload_Status",
+          "value": "UTD File Analysis Upload Status"
+        },
+        {
+          "key": "GEO_Fence_Alert_Status",
+          "value": "GEO Fence Alert Status"
+        },
+        {
+          "key": "BFD_Between_Sites_Down",
+          "value": "BFD Between Sites Down"
+        },
+        {
+          "key": "ZTP Upgrade Failed",
+          "value": "ZTP Upgrade Failed"
+        },
+        {
+          "key": "Control_TLOC_Down",
+          "value": "Control TLOC Down"
+        },
+        {
+          "key": "APPQOE_ALARM",
+          "value": "APPQOE ALARM"
+        },
+        {
+          "key": "PxGrid_Connection_Notification",
+          "value": "PxGrid Connection Notification"
+        },
+        {
+          "key": "Control_Site_Up",
+          "value": "Control Site Up"
+        },
+        {
+          "key": "SLA_Violation_Packet_Drop",
+          "value": "SLA Violation Packet Drop"
+        },
+        {
+          "key": "BFD_Site_Down",
+          "value": "BFD Site Down"
+        },
+        {
+          "key": "BFD_Site_Up",
+          "value": "BFD Site Up"
+        },
+        {
+          "key": "Control_vBond_State_Change",
+          "value": "Control vBond State Change"
+        },
+        {
+          "key": "BGP_Router_Up",
+          "value": "BGP Router Up"
+        },
+        {
+          "key": "Process_Restart",
+          "value": "Process Restart"
+        },
+        {
+          "key": "ZBFW_Session_Maximum",
+          "value": "ZBFW Session Maximum"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "property": "values_short_display",
+    "dataType": "jsonArray"
+  },
+  {
+    "property": "values",
+    "dataType": "jsonArray"
+  },
+  {
+    "property": "severity",
+    "dataType": "string",
+    "display": "iconAndText"
+  },
+  {
+    "property": "rule_name_display",
+    "dataType": "string"
+  },
+  {
+    "property": "message",
+    "dataType": "string"
+  },
+  {
+    "property": "possible_causes",
+    "dataType": "string"
+  },
+  {
+    "property": "entry_time",
+    "dataType": "date"
+  },
+  {
+    "property": "cleared_time",
+    "dataType": "date"
+  },
+  {
+    "property": "uuid",
+    "dataType": "string"
+  },
+  {
+    "property": "type",
+    "dataType": "string"
+  },
+  {
+    "property": "component",
+    "dataType": "string"
+  },
+  {
+    "property": "severity_number",
+    "dataType": "number"
+  },
+  {
+    "property": "devices",
+    "dataType": "object"
+  },
+  {
+    "property": "active",
+    "dataType": "boolean"
+  },
+  {
+    "property": "consumed_events",
+    "dataType": "false"
+  },
+  {
+    "property": "values",
+    "dataType": "object"
+  },
+  {
+    "property": "acknowledged",
+    "dataType": "boolean"
+  },
+  {
+    "property": "cleared_events",
+    "dataType": "string"
+  },
+  {
+    "property": "cleared_by",
+    "dataType": "string"
+  }
+]
