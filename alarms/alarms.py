@@ -1,6 +1,8 @@
 import sys
+from datetime import datetime
 
 import click
+from tabulate import tabulate
 
 sys.path.insert(0, "..")
 from catalystwan.dataclasses import Severity
@@ -11,8 +13,21 @@ from utils.session import create_session
 session = create_session()
 
 
-def print_alarm(item):
-    print(f"system-ip: {item.system_ip}, host: {item.hostname} , severity: {item.severity}")
+def print_alarm_table(alarms):
+    table_data = []
+    for alarm in alarms:
+        # Convert Unix timestamp to human readable format
+        readable_time = datetime.fromtimestamp(alarm.entry_time / 1000).strftime("%Y-%m-%d %H:%M:%S")
+
+        # Remove "Severity." prefix from severity value
+        severity_str = str(alarm.severity)
+        if severity_str.startswith("Severity."):
+            severity_str = severity_str.replace("Severity.", "")
+
+        table_data.append([readable_time, alarm.system_ip, alarm.hostname, severity_str, alarm.component])
+
+    headers = ["Date", "System IP", "Hostname", "Severity", "Component"]
+    print(tabulate(table_data, headers=headers, tablefmt="grid"))
 
 
 @click.group()
@@ -22,58 +37,51 @@ def cli():
 
 
 @click.command()
-def get_alarms():
+def get_all():
     """
     Get all alarms
     """
     alarms = session.api.alarms.get()
-    tt = session.api.users.
     print("~~~ ALARMS ~~~~~~~~~~~~~~~~~")
-    for item in alarms:
-        print_alarm(item)
+    print_alarm_table(alarms)
 
 
 @click.command()
-def get_non_viewed_alarms():
+def get_non_viewed():
     """
     To get all not viewed alarms
     """
-    not_viewed_alarms = session.api.alarms.get().filter(viewed=False)
-    print("~~~ ALARMS - not viewed ~~~~~~~~~~~~~~~~~")
-    for item in not_viewed_alarms:
-        print_alarm(item)
+    alarms = session.api.alarms.get().filter(viewed=False)
+    print("~~~ ALARMS ~~~~~~~~~~~~~~~~~")
+    print_alarm_table(alarms)
 
 
 @click.command()
-def get_alarms_from_last24h():
+def get_last():
     """
     To get all alarms from past n hours
     """
     n = 24
-    alarms_from_n_hours = session.api.alarms.get(from_time=n)
-
-    print("~~~ ALARMS - not viewed ~~~~~~~~~~~~~~~~~")
-    for item in alarms_from_n_hours:
-        print_alarm(item)
+    alarms = session.api.alarms.get(from_time=n)
+    print(f"~~~ ALARMS - from last {n}h ~~~~~~~~~~~~~~~~~")
+    print_alarm_table(alarms)
 
 
 @click.command()
-def get_alarms_critical_from_last24h():
+def get_last_critical():
     """
     To get all critical alarms from past n hours
     """
-
-    n = 48
-    critical_alarms = session.api.alarms.get(from_time=n).filter(severity=Severity.CRITICAL)
-    print("~~~ ALARMS - critical ~~~~~~~~~~~~~~~~~")
-    for item in critical_alarms:
-        print_alarm(item)
+    n = 24
+    alarms = session.api.alarms.get(from_time=n).filter(severity=Severity.CRITICAL)
+    print(f"~~~ ALARMS - critical from last {n}h~~~~~~~~~~~~~~~~~")
+    print_alarm_table(alarms)
 
 
-cli.add_command(get_alarms)
-cli.add_command(get_non_viewed_alarms)
-cli.add_command(get_alarms_from_last24h)
-cli.add_command(get_alarms_critical_from_last24h)
+cli.add_command(get_all)
+cli.add_command(get_non_viewed)
+cli.add_command(get_last)
+cli.add_command(get_last_critical)
 
 
 # Main

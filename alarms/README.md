@@ -1,11 +1,20 @@
 # Alarms
 
-## Mapping: alarm to severity
+## Get alarms components and event names
+
+Returns components
+- GET https://{{vmanage}}:{{port}}/dataservice/event/component/keyvalue
+- [Response example](examples/example_payload_alarms_events_components.json)
+
+Returns event names
+- GET https://{{vmanage}}:{{port}}/dataservice/event/types/keyvalue
+- [Response example](examples/example_payload_alarms_events_types.json)
+
+## Get alarm to severity mapping
 
 API Call:
 - GET https://{{vmanage}}:{{port}}/dataservice/alarms/severitymappings
-
-[Response example](examples/example_payload_alarms_mapping.json)
+- [Response example](examples/example_payload_alarms_mapping.json)
 
 Gives a list of all alarms classified by category:
 - Critical
@@ -18,25 +27,82 @@ Each entry has multiple fields, including these 2 fields:
 - "key": "CPU_Usage",
 - "value": "CPU Usage"
 
-## Query fields
-
-API Call:
-- GET https://{{vmanage}}:{{port}}/dataservice/alarms/fields
-
-[Response example](examples/example_payload_alarms_fields.json)
-
-
-## Collecting alarms
-
-- API call: POST dataservice/alarms (payload=query)
-- Bulk API call: GET dataservice/data/device/statistics/alarm?startDate={{startDate}}&endDate={{endDate}}&timeZone={{timeZone}}&count={{count}}
-
-[Response example](examples/example_payload_alarms_bulk.json)
+## Query: Filter Alarms
 
 You can filter your queries using either of three provided fields:
 - rulename (ex: cpu-usage)
 - rule_name_display (ex: CPU_Usage)
 - type (ex: cpu-usage)
+- severity (ex: Critical)
+
+Get query fields:
+- GET https://{{vmanage}}:{{port}}/dataservice/alarms/fields
+- [Response example](examples/example_payload_alarms_fields.json)
+
+Example of query payload:
+
+```json
+{
+  "query": {
+    "condition": "AND",
+    "rules": [
+      {
+        "field": "entry_time",
+        "operator": "last_n_days",
+        "type": "date",
+        "value": [
+          "100"
+        ]
+      },
+      {
+        "field": "rule_name_display",
+        "operator": "in",
+        "type": "string",
+        "value": [
+          "CPU_Usage"
+        ]
+      }
+    ]
+  },
+  "size": 10000
+}
+```
+
+or
+
+```json
+{
+  "query": {
+    "condition": "AND",
+    "rules": [
+      {
+        "field": "entry_time",
+        "operator": "between",
+        "type": "date",
+        "value": ["2025-01-01T08:00:00", "2025-03-17T08:00:00"]
+      },
+      {
+        "field": "rule_name_display",
+        "operator": "in",
+        "type": "string",
+        "value": ["CPU_Usage"]
+      }
+    ]
+  },
+  "size": 10000
+}
+```
+
+## Get Alarms
+
+Returns alarms from SD-WAN Manager stats DB:
+- POST dataservice/alarms (payload=query, see section above "Query: Filter Alarms")
+
+Using Bulk API call:
+- GET dataservice/data/device/statistics/alarm?startDate={{startDate}}&endDate={{endDate}}&timeZone={{timeZone}}&count={{count}}
+- [Response example](examples/example_payload_alarms_bulk.json)
+
+Example of response (one entry:
 
 ```json
 [cut]
@@ -86,6 +152,8 @@ You can filter your queries using either of three provided fields:
 },
 [cut]
 ```
+
+
 
 ## List of alarm_type
 

@@ -57,6 +57,41 @@ def save_json(filename: str, payload: str, data: str):
 
 
 @click.command()
+def list_alarms():
+    """Mapping: alarm to severity"""
+
+    url = "dataservice/alarms"
+    name = "alarmsseverity"
+
+    with create_session() as session:
+        response = session.get(url)
+
+        if response.status_code == 200:
+            payload = response.json()
+            data = response.json()["data"]
+            save_json(name, payload, data)
+        else:
+            click.echo("Failed to retrieve alarms " + str(response.text))
+            exit()
+
+        headers = ["UUID", "Model", "Certificate"]
+
+        table = list()
+
+        for item in data:
+            tr = [
+                item["type"],
+                item["severity"],
+                item["devices"][0]["system-ip"],
+            ]
+            table.append(tr)
+        try:
+            click.echo(tabulate.tabulate(table, headers, tablefmt="fancy_grid"))
+        except UnicodeEncodeError:
+            click.echo(tabulate.tabulate(table, headers, tablefmt="grid"))
+
+
+@click.command()
 def list_all():
     """Get all alarms and save in a file"""
 
