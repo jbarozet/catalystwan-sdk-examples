@@ -4,12 +4,14 @@ catalystwan client is a package for creating simple and parallel automatic reque
 It is intended to serve as a multiple session handler (provider, provider as a tenant, tenant).
 The library is not dependent on environment which is being run in, you just need a connection to any vManage.
 
-![Architecture](./catalystwan-architecture.jpg)
+Architecture:
+- Layer1: Core. provides basic functionality for interacting with vManage API. Provides a session object for interacting with vManage API.
+- Layer2: Endpoints. provides high-level API for interacting with vManage API.
+- Layer3: User APIs. provides user-friendly API for interacting with vManage API.
 
 Check it out:
 
 - <https://github.com/cisco-en-programmability/catalystwan-sdk>
-- <https://github.com/cisco-open/cisco-catalyst-wan-sdk> (archived)
 - <https://pypi.org/project/catalystwan/>
 
 This repository just gives a few examples of how to use catalystwan SDK.
@@ -54,7 +56,8 @@ They will be dumped into catalystwan.log file.
 
 Python examples are organized as follows:
 
-- `requests` folder: examples based on the requests library (without catalystwan SDK usage)
-- `raw` folder: examples based on catalystwan layer1
-- `endpoints` folder: examples based on catalystwan layer2, endpoints
-- `api` folder: examples based on catalystwan layer3, user APIs
+- `01-raw` folder: examples based on catalystwan layer1
+- `02-endpoints` folder: examples based on catalystwan layer2, endpoints
+- `03-api` folder: examples based on catalystwan layer3, user APIs
+- `04-config-group` fodler: example of config-group and profiles definition
+- `alarms` folder: examples of API usage for alarms.
