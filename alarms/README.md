@@ -3,18 +3,16 @@
 ## Get alarms components and event names
 
 Returns components
-- GET https://{{vmanage}}:{{port}}/dataservice/event/component/keyvalue
+- `GET https://{{vmanage}}:{{port}}/dataservice/event/component/keyvalue`
 - [Response example](examples/example_payload_alarms_events_components.json)
 
-Returns event names
-- GET https://{{vmanage}}:{{port}}/dataservice/event/types/keyvalue
+Returns event types
+- `GET https://{{vmanage}}:{{port}}/dataservice/event/types/keyvalue`
 - [Response example](examples/example_payload_alarms_events_types.json)
 
-## Get alarm to severity mapping
+This can be used to filter alarms by component or event type.
 
-API Call:
-- GET https://{{vmanage}}:{{port}}/dataservice/alarms/severitymappings
-- [Response example](examples/example_payload_alarms_mapping.json)
+## Get alarm to severity mapping
 
 Gives a list of all alarms classified by category:
 - Critical
@@ -23,20 +21,24 @@ Gives a list of all alarms classified by category:
 - Minor
 - Info
 
+API Call:
+- `GET https://{{vmanage}}:{{port}}/dataservice/alarms/severitymappings`
+- [Response example](examples/example_payload_alarms_mapping.json)
+
 Each entry has multiple fields, including these 2 fields:
 - "key": "CPU_Usage",
 - "value": "CPU Usage"
 
 ## Query: Filter Alarms
 
-You can filter your queries using either of three provided fields:
+You can filter your queries using either of these fields:
 - rulename (ex: cpu-usage)
 - rule_name_display (ex: CPU_Usage)
 - type (ex: cpu-usage)
 - severity (ex: Critical)
 
-Get query fields:
-- GET https://{{vmanage}}:{{port}}/dataservice/alarms/fields
+Get full list of query fields:
+- `GET https://{{vmanage}}:{{port}}/dataservice/alarms/fields`
 - [Response example](examples/example_payload_alarms_fields.json)
 
 Example of query payload:
@@ -96,10 +98,11 @@ or
 ## Get Alarms
 
 Returns alarms from SD-WAN Manager stats DB:
-- POST dataservice/alarms (payload=query, see section above "Query: Filter Alarms")
+- `POST https://{{vmanage}}:{{port}}/dataservice/alarms`
+- With query payload, see section above "Query: Filter Alarms")
 
 Using Bulk API call:
-- GET dataservice/data/device/statistics/alarm?startDate={{startDate}}&endDate={{endDate}}&timeZone={{timeZone}}&count={{count}}
+- `GET dataservice/data/device/statistics/alarm?startDate={{startDate}}&endDate={{endDate}}&timeZone={{timeZone}}&count={{count}}`
 - [Response example](examples/example_payload_alarms_bulk.json)
 
 Example of response (one entry:
@@ -152,17 +155,3 @@ Example of response (one entry:
 },
 [cut]
 ```
-
-
-
-## List of alarm_type
-
-- alarm_type = "omp-state-change"
-- alarm_type = "tloc_down"
-- alarm_type = "cpu-usage"
-- alarm_type = "system-reboot-issued",
-- alarm_type = "control-vbond-state-change",
-- alarm_type = "rootca-sync-failure"
-- alarm_type = "security-root-cert-chain-installed",
-- alarm_type = "disk-usage"
-- alarm_type = "sla-violation"
