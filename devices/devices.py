@@ -2,7 +2,10 @@
 #
 #
 import sys
+
 import click
+from catalystwan.exceptions import ManagerHTTPError
+from catalystwan.models.configuration.feature_profile.sdwan.system import bfd
 from tabulate import tabulate
 
 sys.path.insert(0, "..")
@@ -19,9 +22,7 @@ def cli():
 
 @click.command()
 def all():
-
     with create_session() as session:
-
         devices = session.api.devices.get()
         count = session.api.devices.count_devices(personality=Personality.EDGE)
 
@@ -45,9 +46,7 @@ def all():
 
 @click.command()
 def edges():
-
     with create_session() as session:
-
         devices = session.api.devices.get()
         count = session.api.devices.count_devices(personality=Personality.EDGE)
         edges = devices.filter(personality=Personality.EDGE)
@@ -71,15 +70,89 @@ def edges():
 
 
 @click.command()
-def edges_reachable():
+@click.option("--system_ip", help="System IP address of the device")
+def interface_status(system_ip):
+    """Retrieve and return information about Interface status of network device
+    Example command: python devices-raw.py interface-status --system_ip 10.0.0.1
+    """
 
     with create_session() as session:
+        devices = session.api.devices.get()
+        edges = devices.filter(personality=Personality.EDGE)
 
+        # Create a list of device IPs
+        device_ips = [dev.local_system_ip for dev in edges]
+
+        # Check if the provided system_ip is in our device list
+        if system_ip not in device_ips:
+            click.echo(f"Error: Device with system IP {system_ip} not found in the network.")
+            return
+
+        transport_interfaces = session.api.device_state.get_device_wan_interfaces(system_ip)
+
+        table = list()
+        headers = ["Name", "State", "Operational State", "Color", "Private IP", "Private Port", "Public IP", "Public Port"]
+
+        for item in transport_interfaces:
+            tr = [
+                item.interfaceName,
+                item.adminState,
+                item.operationalState,
+                item.color,
+                item.privateIp,
+                item.privatePort,
+                item.publicIp,
+                item.publicPort,
+            ]
+            table.append(tr)
+
+        click.echo(tabulate(table, headers, tablefmt="fancy_grid"))
+
+
+@click.command()
+@click.option("--system_ip", help="System IP address of the device")
+def bfd_sessions(system_ip):
+    """Retrieve and return information about bfd sessions for a router
+    Example command: python devices-raw.py bfd_sessions --system_ip 10.0.0.1
+    """
+
+    with create_session() as session:
+        devices = session.api.devices.get()
+        edges = devices.filter(personality=Personality.EDGE)
+
+        # Create a list of device IPs
+        device_ips = [dev.local_system_ip for dev in edges]
+
+        # Check if the provided system_ip is in our device list
+        if system_ip not in device_ips:
+            click.echo(f"Error: Device with system IP {system_ip} not found in the network.")
+            return
+
+        bfd_sessions = session.api.device_state.get_bfd_sessions(system_ip)
+
+        table = list()
+        headers = ["State", "Source TLOC", "Remote TLOC", "DeviceIP", "SourceIP", "DestinationIP"]
+
+        for dev in bfd_sessions:
+            tr = [
+                dev.state,
+                dev.sourceTlocColor,
+                dev.remoteTlocColor,
+                dev.deviceIp,
+                dev.sourceIp,
+                dev.destinationPublicIp,
+            ]
+            table.append(tr)
+
+        click.echo(tabulate(table, headers, tablefmt="fancy_grid"))
+
+
+@click.command()
+def edges_reachable():
+    with create_session() as session:
         devices = session.api.devices.get()
         count = session.api.devices.count_devices(personality=Personality.EDGE)
-        reachable = devices.filter(
-            personality=Personality.EDGE, reachability="reachable"
-        )
+        reachable = devices.filter(personality=Personality.EDGE, reachability="reachable")
 
         print(f"\nNumber of WAN Edge devices in the fabric: {count}")
 
@@ -101,27 +174,21 @@ def edges_reachable():
 
 @click.command()
 def edge_details():
-
     edge_name = input("\nEnter device name: ")
 
     with create_session() as session:
-
         devices = session.api.devices.get()
         edge_device = devices.filter(hostname=edge_name).single_or_default()
 
         if edge_device is not None:
-            print(
-                f" - Edge: {edge_device.hostname} - uuid: {edge_device.uuid} - cpu: {edge_device.cpu_load}"
-            )
+            print(f" - Edge: {edge_device.hostname} - uuid: {edge_device.uuid} - cpu: {edge_device.cpu_load}")
         else:
             print("Device not found")
 
 
 @click.command()
 def controllers():
-
     with create_session() as session:
-
         devices = session.api.devices.get()
 
         table = list()
@@ -168,9 +235,7 @@ def controllers():
 
 @click.command()
 def health():
-
     with create_session() as session:
-
         # Device Health
         device_health = session.api.dashboard.get_devices_health_overview()
         print("\n~~~ Device Health Summary")
@@ -200,11 +265,7 @@ def health():
         headers = ["Tunnel Name", "VQoE Score", "Health", "Latency", "Jitter", "Loss"]
 
         for item in tunnel_health:
-            health_color = (
-                item.health.split(".")[-1]
-                if isinstance(item.health, str)
-                else item.health.name
-            )
+            health_color = item.health.split(".")[-1] if isinstance(item.health, str) else item.health.name
             tr = [
                 item.name,
                 item.vqoe_score,
@@ -222,10 +283,11 @@ def health():
 
 
 if __name__ == "__main__":
-
     # Add commands
     cli.add_command(all)
     cli.add_command(edges)
+    cli.add_command(interface_status)
+    cli.add_command(bfd_sessions)
     cli.add_command(edges_reachable)
     cli.add_command(edge_details)
     cli.add_command(controllers)

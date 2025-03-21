@@ -42,7 +42,7 @@ def cli():
 
 
 @click.command()
-def list_all():
+def all():
     """Retrieve the list of all devices (wan edges)
     Example command: python devices.py list-all
     """
@@ -74,13 +74,48 @@ def list_all():
 
 
 @click.command()
-def list_deployed():
+@click.option("--system_ip", help="System IP address of the device")
+def interface_status(system_ip):
+    """Retrieve and return information about Interface status of network device
+    Example command: python devices-raw.py interface-status --system_ip 10.0.0.1
+    """
+
+    with create_session() as session:
+        url = "/dataservice/device/interface/synced?deviceId={0}".format(system_ip)
+        response = session.get(url)
+
+        if response.status_code == 200:
+            payload = response.json()
+            data = response.json()["data"]
+            save_json(payload, data)
+
+        else:
+            click.echo("Failed to get device list " + str(response.text))
+            exit()
+
+        headers = ["Interface Name", "IP address", "VPN ID", "Operational status"]
+        table = list()
+
+        for item in data:
+            if item.get("ip-address") != "-":
+                tr = [
+                    item["ifname"],
+                    item["ip-address"],
+                    item["vpn-id"],
+                    item["if-oper-status"],
+                ]
+                table.append(tr)
+
+        click.echo(tabulate.tabulate(table, headers, tablefmt="fancy_grid"))
+
+
+@click.command()
+def deployed():
     """Retrieve the list of devices (wan edges) that are deployed
     Example command: python devices.py list-deployed-json
     """
 
     with create_session() as session:
-
         # Get list of devices
         # url_base = "dataservice/device/vedgeinventory/summary"
         url = "/dataservice/device/vedgeinventory/detail?status=deployed"
@@ -110,7 +145,7 @@ def list_deployed():
 
 
 @click.command()
-def list_by_ip():
+def by_ip():
     """Retrieve details about a device using its system IP address
     Example command: python devices.py list-by-ip
     """
@@ -159,11 +194,10 @@ def config():
     Example command: python devices.py config
     """
 
-    # device_uuid = input("Enter device UUID: ")
-    device_uuid = "C8K-3D1A8960-6E76-532C-DA93-50626FC5797E"
+    device_uuid = input("Enter device UUID: ")
+    # device_uuid = "C8K-3D1A8960-6E76-532C-DA93-50626FC5797E"
 
     with create_session() as session:
-
         url = "dataservice//template/config/running/%s" % (device_uuid)
         response = session.get(url)
 
@@ -182,9 +216,10 @@ def config():
 # Run commands
 # ----------------------------------------------------------------------------------------------------
 
-cli.add_command(list_all)
-cli.add_command(list_deployed)
-cli.add_command(list_by_ip)
+cli.add_command(all)
+cli.add_command(interface_status)
+cli.add_command(deployed)
+cli.add_command(by_ip)
 cli.add_command(config)
 
 if __name__ == "__main__":
