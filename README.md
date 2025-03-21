@@ -61,3 +61,4 @@ Python examples are organized as follows:
 - `03-api` folder: examples based on catalystwan layer3, user APIs
 - `04-config-group` fodler: example of config-group and profiles definition
 - `alarms` folder: examples of API usage for alarms.
+- `devices` folder: examples of API usage for devices.
