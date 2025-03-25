@@ -1,11 +1,16 @@
-# Get devices
+# Device Monitoring
 #
+# @author Jean-Marc Barozet <jbarozet@cisco.com>
 #
+# Using catalystwan-sdk package
+# Layer3: user friendly interface
+
 import sys
 
 import click
-from catalystwan.exceptions import ManagerHTTPError
-from catalystwan.models.configuration.feature_profile.sdwan.system import bfd
+
+# from catalystwan.exceptions import ManagerHTTPError
+# from catalystwan.models.configuration.feature_profile.sdwan.system import bfd
 from tabulate import tabulate
 
 sys.path.insert(0, "..")
@@ -16,17 +21,26 @@ from utils.session import create_session
 
 @click.group()
 def cli():
-    """Command line tool to showcase Catalyst SD-WAN Python SDK"""
+    """Command line tool to showcase Catalyst WAN Python SDK"""
     pass
 
 
 @click.command()
-def all():
+def devices():
+    """Retrieve and return all devices (routers and controllers) in the SD-WAN fabric
+    Example command: python devices.py devices
+    """
     with create_session() as session:
         devices = session.api.devices.get()
-        count = session.api.devices.count_devices(personality=Personality.EDGE)
+        count_routers = session.api.devices.count_devices(personality=Personality.EDGE)
+        count_managers = session.api.devices.count_devices(personality=Personality.VMANAGE)
+        count_validators = session.api.devices.count_devices(personality=Personality.VBOND)
+        count_controllers = session.api.devices.count_devices(personality=Personality.VSMART)
 
-        print(f"\nNumber of WAN Edge devices in the fabric: {count}")
+        print(f"Number of routers  in the fabric: {count_routers}")
+        print(f"Number of managers in the fabric: {count_managers}")
+        print(f"Number of validators in the fabric: {count_validators}")
+        print(f"Number of controllers in the fabric: {count_controllers}\n")
 
         table = list()
         headers = ["Device Name", "System IP", "Serial", "UUID", "Reachable"]
@@ -45,7 +59,11 @@ def all():
 
 
 @click.command()
-def edges():
+def routers():
+    """Retrieve and return all routers in the SD-WAN fabric
+    Example command: python devices.py routers
+    """
+
     with create_session() as session:
         devices = session.api.devices.get()
         count = session.api.devices.count_devices(personality=Personality.EDGE)
@@ -70,10 +88,38 @@ def edges():
 
 
 @click.command()
+def routers_reachable():
+    """Retrieve and return all routers that are reachable in the SD-WAN fabric
+    Example command: python devices.py routers-reachable
+    """
+    with create_session() as session:
+        devices = session.api.devices.get()
+        count = session.api.devices.count_devices(personality=Personality.EDGE)
+        reachable = devices.filter(personality=Personality.EDGE, reachability="reachable")
+
+        print(f"\nNumber of WAN routers in the fabric: {count}")
+
+        table = list()
+        headers = ["Device Name", "System IP", "Serial", "UUID", "Reachable"]
+
+        for dev in reachable:
+            tr = [
+                dev.hostname,
+                dev.local_system_ip,
+                dev.board_serial,
+                dev.uuid,
+                dev.is_reachable,
+            ]
+            table.append(tr)
+
+        click.echo(tabulate(table, headers, tablefmt="fancy_grid"))
+
+
+@click.command()
 @click.option("--system_ip", help="System IP address of the device")
 def interface_status(system_ip):
-    """Retrieve and return information about Interface status of network device
-    Example command: python devices-raw.py interface-status --system_ip 10.0.0.1
+    """Retrieve and return information about router interface status
+    Example command: python devices.py interface-status --system_ip <system_ip>
     """
 
     with create_session() as session:
@@ -113,7 +159,7 @@ def interface_status(system_ip):
 @click.option("--system_ip", help="System IP address of the device")
 def bfd_sessions(system_ip):
     """Retrieve and return information about bfd sessions for a router
-    Example command: python devices-raw.py bfd_sessions --system_ip 10.0.0.1
+    Example command: python devices.py bfd-sessions --system_ip <system_ip>
     """
 
     with create_session() as session:
@@ -148,24 +194,34 @@ def bfd_sessions(system_ip):
 
 
 @click.command()
-def edges_reachable():
+@click.option("--system_ip", help="System IP address of the device")
+def omp(system_ip):
+    """Retrieve and return information about omp sessions for a router
+    Example command: python devices.py omp --system_ip <system_ip>
+    """
+
     with create_session() as session:
         devices = session.api.devices.get()
-        count = session.api.devices.count_devices(personality=Personality.EDGE)
-        reachable = devices.filter(personality=Personality.EDGE, reachability="reachable")
+        edges = devices.filter(personality=Personality.EDGE)
 
-        print(f"\nNumber of WAN Edge devices in the fabric: {count}")
+        # Create a list of device IPs
+        device_ips = [dev.local_system_ip for dev in edges]
 
+        # Check if the provided system_ip is in our device list
+        if system_ip not in device_ips:
+            click.echo(f"Error: Device with system IP {system_ip} not found in the network.")
+            return
+
+        # Get OMP peers
+        omp_peers = session.api.omp.get_omp_peers(system_ip)
         table = list()
-        headers = ["Device Name", "System IP", "Serial", "UUID", "Reachable"]
+        headers = ["vSmart Peer", "State", "Site ID"]
 
-        for dev in reachable:
+        for item in omp_peers:
             tr = [
-                dev.hostname,
-                dev.local_system_ip,
-                dev.board_serial,
-                dev.uuid,
-                dev.is_reachable,
+                item.peerIp,
+                item.state,
+                item.siteId,
             ]
             table.append(tr)
 
@@ -173,21 +229,33 @@ def edges_reachable():
 
 
 @click.command()
-def edge_details():
-    edge_name = input("\nEnter device name: ")
+@click.option("--name", help="Name of the device")
+def router_details(name):
+    """Retrieve and return  device details in the SD-WAN fabric
+    Example command: python devices.py router-details --name <device_name>
+    """
 
     with create_session() as session:
         devices = session.api.devices.get()
-        edge_device = devices.filter(hostname=edge_name).single_or_default()
+        edge_device = devices.filter(hostname=name).single_or_default()
 
         if edge_device is not None:
-            print(f" - Edge: {edge_device.hostname} - uuid: {edge_device.uuid} - cpu: {edge_device.cpu_load}")
+            print(f"Edge Router: {edge_device.hostname} ")
+            print(f" - system-ip: {edge_device.local_system_ip}")
+            print(f" - uuid: {edge_device.uuid}")
+            print(f" - site name: {edge_device.site_name}")
+            print(f" - cpu: {edge_device.cpu_load}")
+            print(f" - mem usage: {edge_device.memUsage}")
         else:
             print("Device not found")
 
 
 @click.command()
 def controllers():
+    """Retrieve and return  all controllers in the SD-WAN fabric
+    Example command: python devices.py controllers
+    """
+
     with create_session() as session:
         devices = session.api.devices.get()
 
@@ -235,6 +303,10 @@ def controllers():
 
 @click.command()
 def health():
+    """Retrieve and return device health
+    Example command: python devices.py health
+    """
+
     with create_session() as session:
         # Device Health
         device_health = session.api.dashboard.get_devices_health_overview()
@@ -284,12 +356,13 @@ def health():
 
 if __name__ == "__main__":
     # Add commands
-    cli.add_command(all)
-    cli.add_command(edges)
+    cli.add_command(devices)
+    cli.add_command(routers)
+    cli.add_command(routers_reachable)
+    cli.add_command(omp)
     cli.add_command(interface_status)
     cli.add_command(bfd_sessions)
-    cli.add_command(edges_reachable)
-    cli.add_command(edge_details)
+    cli.add_command(router_details)
     cli.add_command(controllers)
     cli.add_command(health)
 
