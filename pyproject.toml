@@ -1,3 +1,16 @@
+[project]
+name = "catalystwan-sdk-examples"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "catalystwan>=0.40.2",
+    "click>=8.1.8",
+    "dotenv>=0.9.9",
+    "pyyaml>=6.0.2",
+    "tabulate>=0.9.0",
+]
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -29,12 +42,12 @@ exclude = [
   "venv",
 ]
 
-# Set the maximum line length to 140.
+# Set the maximum line length
 line-length = 150
 indent-width = 4
 
 # Assume Python 3.9
-target-version = "py312"
+# target-version = "py312"
 
 [tool.ruff.lint]
 # Add the `line-too-long` rule to the enforced rule set. By default, Ruff omits rules that
